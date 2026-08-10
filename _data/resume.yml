@@ -1,0 +1,75 @@
+education:
+  title: Education
+  intro: >-
+    전공 학습과 연계 학위 과정을 통해 IT 서비스 기획, 개발, 데이터 활용 역량을 함께 쌓고 있습니다.
+  items:
+    - name: 서울과학기술대학교
+      period: 재학 중
+      description: >-
+        산업공학부 ITM 전공 4학년으로, IT 서비스 구현과 비즈니스 관점의 문제 해결을 함께 학습하고 있습니다.
+    - name: Northumbria University
+      period: 연계 학위 과정
+      description: >-
+        Information Technology Management 연계 학위 과정을 이수하며 영어 기반 전공 수업과 협업 환경을 경험하고 있습니다.
+
+certification:
+  title: Certification
+  intro: >-
+    자격증과 외부 인증은 추후 확정된 정보를 기준으로 업데이트할 예정입니다.
+  items:
+    - name: 업데이트 예정
+      period: "-"
+      description: >-
+        보유 자격증명, 발급 기관, 취득일을 전달해주면 이 영역에 맞춰 정리할 수 있습니다.
+
+curriculum:
+  title: Curriculum
+  intro: >-
+    AI, 데이터, 클라우드 배포를 실제 서비스 구현 흐름으로 연결하는 학습과 프로젝트 경험입니다.
+  items:
+    - name: IBM x RedHat 부트캠프
+      period: 진행
+      description: >-
+        풀스택 프로젝트, Docker, AWS EC2, GitHub Actions 기반 배포 흐름을 실습하며 서비스 구현과 운영 관점을 학습했습니다.
+    - name: AI 서비스 파이프라인
+      period: 프로젝트
+      description: >-
+        사용자 입력 검증, NLP 구조화, 이미지 품질 검사, 표준 단가 조회, LLM 결과 생성과 검증을 연결하는 단계형 AI 워크플로를 설계했습니다.
+    - name: 대용량 데이터 처리
+      period: 실습
+      description: >-
+        HDFS와 PySpark 기반 데이터 처리, VMware 저장공간 확장 등 데이터 처리 환경 구성 경험을 쌓았습니다.
+
+skills:
+  title: Skills
+  intro: >-
+    프로젝트에서 사용한 기술을 서비스 구현 흐름 기준으로 정리했습니다.
+  groups:
+    - name: AI / Data
+      items:
+        - Python
+        - LangChain
+        - LangGraph
+        - ChromaDB
+        - PySpark
+        - TensorFlow Lite
+    - name: Frontend
+      items:
+        - React
+        - JavaScript
+        - HTML
+        - CSS
+    - name: Backend / App
+      items:
+        - FastAPI
+        - Spring Boot
+        - Android
+        - Kotlin
+        - Java
+    - name: Database / Cloud
+      items:
+        - Firebase
+        - AWS EC2
+        - Docker
+        - GitHub Actions
+        - Linux

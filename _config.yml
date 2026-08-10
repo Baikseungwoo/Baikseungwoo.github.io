@@ -1,0 +1,29 @@
+# Site settings
+title: Seungwoo Baik
+description: Portfolio of Seungwoo Baik, an AI and DevOps-focused developer building practical services from models, APIs, data pipelines, and cloud deployment.
+lang: ko
+social_image: /assets/favicon.png
+og_locale: ko_KR
+theme_color: "#1a222c"
+# baseurl: "" # the subpath of your site, e.g. /blog
+# url: "https://Baikseungwoo.github.io"
+
+# User settings
+username: Seungwoo Baik
+user_description: AI 모델을 실제 서비스로 연결하는 개발자입니다. React, FastAPI, Spring Boot, Android, Firebase, Docker, AWS 기반으로 프론트엔드부터 백엔드, AI 파이프라인, 클라우드 배포까지 직접 구현하며, LangChain, LangGraph, ChromaDB 기반 RAG와 데이터 처리 흐름에 관심을 두고 있습니다.
+user_title: AI & DevOps Developer
+email: swbaik01@gmail.com
+phone: 010-8626-1074
+velog_url: https://velog.io/@swbaik01/posts
+profile_image: /assets/sunglasses.jpg
+profile_initial: S
+# twitter_username:
+# instagram_username:
+# facebook_username:
+# linkedin_username:
+github_username: Baikseungwoo
+# medium_username:
+# medium_url:
+# gplus_username:
+
+exclude: ['package.json', 'src', 'node_modules', 'vendor']

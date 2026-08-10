@@ -1,0 +1,39 @@
+intro_title: 주요 프로젝트
+intro_body: AI 서비스, 웹 애플리케이션, 모바일 앱, 클라우드 배포, 시스템 프로그래밍 경험을 프로젝트 단위로 정리했습니다.
+
+items:
+  - title: Chalkak App
+    category: 모바일 AI
+    summary: 카메라 기반 객체 인식을 통해 어린이의 영어 단어와 문장 학습을 돕는 모바일 앱입니다. TensorFlow Lite 모델을 Android 앱 학습 흐름에 연결하고 Firebase 기반 데이터 관리 구조를 경험했습니다.
+    stack: Kotlin, Android, TensorFlow Lite, Firebase
+    link: https://github.com/chalkak-itm/chalkak-app
+
+  - title: AI 플랫폼 워크플로
+    category: AI 서비스
+    summary: 5인 AI 플랫폼 프로젝트에서 팀장으로 서비스 기획, 시스템 아키텍처, API와 DB 구조, AI 파이프라인 설계를 총괄했습니다. RAG, 유사 사례 검색, 단계형 AI 워크플로를 중심으로 구현했습니다.
+    stack: LangChain, LangGraph, ChromaDB, FastAPI, React
+    link: https://github.com/Baikseungwoo
+
+  - title: CampusShare
+    category: 풀스택 웹
+    summary: 강의자료와 시험자료 같은 학업 리소스를 공유하고 탐색할 수 있는 캠퍼스 리소스 플랫폼입니다. 백엔드와 프론트엔드 역할을 나누어 서비스 흐름을 설계한 프로젝트입니다.
+    stack: React, Spring Boot, JavaScript
+    link: https://github.com/Baikseungwoo
+
+  - title: WP Emotion Diary
+    category: 웹 애플리케이션
+    summary: 감정 기록을 주제로 한 웹 프로그래밍 텀 프로젝트입니다. 사용자 입력, 감정 기록 흐름, UI 구성, 데이터 흐름을 함께 고려해 결과물 형태로 구현했습니다.
+    stack: HTML, CSS, JavaScript
+    link: https://github.com/Baikseungwoo/WP_Term-project_Emotionl-Diary
+
+  - title: pintOS
+    category: 시스템 프로그래밍
+    summary: C와 Linux 기반으로 운영체제 구조를 학습한 프로젝트입니다. 메모리, 스레드, 시스템 콜 등 저수준 시스템 구현 흐름을 이해하기 위해 진행했습니다.
+    stack: C, Linux, Operating System
+    link: https://github.com/Baikseungwoo/pintOS
+
+  - title: IBM x RedHat Study
+    category: 클라우드 / DevOps
+    summary: IBM x RedHat 부트캠프 학습 과정과 미니 프로젝트 기록을 정리한 저장소입니다. Docker, AWS EC2, GitHub Actions 기반 배포 흐름과 팀 협업 경험을 쌓았습니다.
+    stack: Docker, AWS EC2, GitHub Actions
+    link: https://github.com/Baikseungwoo

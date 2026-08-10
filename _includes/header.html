@@ -1,0 +1,91 @@
+<div id="particles-js">
+  <a class="site-brand" href="#particles-js" data-scroll>
+    <span class="site-brand__kr">백승우_</span>
+    <span class="site-brand__en">Seungwoo Baik</span>
+    <span class="site-brand__type">Portfolio</span>
+  </a>
+  <nav class="site-nav" aria-label="Section navigation">
+    <a class="site-nav__link" href="#about" data-scroll data-section="about">About</a>
+    <a class="site-nav__link" href="#education" data-scroll data-section="education">Education</a>
+    <a class="site-nav__link" href="#certification" data-scroll data-section="certification">Certification</a>
+    <a class="site-nav__link" href="#curriculum" data-scroll data-section="curriculum">Curriculum</a>
+    <a class="site-nav__link" href="#skills" data-scroll data-section="skills">Skills</a>
+    <a class="site-nav__link" href="#projects" data-scroll data-section="projects">Projects</a>
+  </nav>
+
+  <div class="header">
+    <div class="profile-photo" aria-label="Profile photo">
+      {% if site.profile_image %}
+      <img src="{{ site.profile_image | prepend: site.baseurl }}" alt="{{ site.username }} profile photo">
+      {% else %}
+      <span>{{ site.profile_initial }}</span>
+      {% endif %}
+    </div>
+
+    <h1>
+      <span class="site-title">{{ site.username }}</span>
+      <span class="site-description">{{ site.user_title }}</span>
+    </h1>
+
+    <div class="header-icons">
+      {% if site.email %}
+      <a aria-label="Send email" href="mailto:{{ site.email }}"><i class="icon fa fa-envelope"></i></a>
+      {% endif %}
+      {% if site.phone %}
+      <a aria-label="Call phone" href="tel:{{ site.phone | remove: '-' }}"><i class="icon fa fa-phone"></i></a>
+      {% endif %}
+      {% if site.velog_url %}
+      <a aria-label="My Velog" target="_blank" rel="noopener noreferrer" href="{{ site.velog_url }}"><i class="icon fa fa-pencil"></i></a>
+      {% endif %}
+      {% if site.twitter_username %}
+      <a aria-label="My Twitter" target="_blank" rel="noopener noreferrer" href="https://twitter.com/{{ site.twitter_username }}"><i class="icon fa fa-twitter" aria-hidden="true"></i></a>
+      {% endif %}
+      {% if site.instagram_username %}
+      <a aria-label="My Instagram" target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/{{ site.instagram_username }}"><i class="icon fa fa-instagram" aria-hidden="true"></i></a>
+      {% endif %}
+      {% if site.facebook_username %}
+      <a aria-label="My Facebook" target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/{{ site.facebook_username }}"><i class="icon fa fa-facebook" aria-hidden="true"></i></a>
+      {% endif %}
+      {% if site.linkedin_username %}
+      <a aria-label="My LinkedIn" target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/{{ site.linkedin_username }}"><i class="icon fa fa-linkedin" aria-hidden="true"></i></a>
+      {% endif %}
+      {% if site.github_username %}
+      <a aria-label="My Github" target="_blank" rel="noopener noreferrer" href="https://github.com/{{ site.github_username }}"><i class="icon fa fa-github-alt" aria-hidden="true"></i></a>
+      {% endif %}
+      {% if site.medium_username %}
+      <a aria-label="My Medium" target="_blank" rel="noopener noreferrer" href="https://medium.com/{{ site.medium_username }}"><i class="icon fa fa-medium" aria-hidden="true"></i></a>
+      {% elsif site.medium_url %}
+      <a aria-label="My Medium" target="_blank" rel="noopener noreferrer" href="https://{{ site.medium_url }}"><i class="icon fa fa-medium" aria-hidden="true"></i></a>
+      {% endif %}
+    </div>
+
+    <div class="header-contact">
+      {% if site.email %}
+      <div class="header-contact__item">
+        <span>E-mail.</span>
+        <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+      </div>
+      {% endif %}
+      {% if site.phone %}
+      <div class="header-contact__item">
+        <span>TEL.</span>
+        <a href="tel:{{ site.phone | remove: '-' }}">{{ site.phone }}</a>
+      </div>
+      {% endif %}
+      {% if site.velog_url %}
+      <div class="header-contact__item">
+        <span>Velog.</span>
+        <a target="_blank" rel="noopener noreferrer" href="{{ site.velog_url }}">{{ site.velog_url | remove: 'https://' }}</a>
+      </div>
+      {% endif %}
+      {% if site.github_username %}
+      <div class="header-contact__item">
+        <span>GitHub.</span>
+        <a target="_blank" rel="noopener noreferrer" href="https://github.com/{{ site.github_username }}">github.com/{{ site.github_username }}</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <a class="down" href="#about" data-scroll><i class="icon fa fa-chevron-down" aria-hidden="true"></i></a>
+</div>
