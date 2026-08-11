@@ -1,75 +1,231 @@
 education:
   title: Education
-  intro: >-
+  intro: |-
     전공 학습과 연계 학위 과정을 통해 IT 서비스 기획, 개발, 데이터 활용 역량을 함께 쌓고 있습니다.
   items:
-    - name: 서울과학기술대학교
+    - name: 서울과학기술대학교 - ITM 전공
       period: 재학 중
-      description: >-
+      description: |-
         산업공학부 ITM 전공 4학년으로, IT 서비스 구현과 비즈니스 관점의 문제 해결을 함께 학습하고 있습니다.
-    - name: Northumbria University
+    - name: Northumbria University Newcastle - ITM
       period: 연계 학위 과정
-      description: >-
-        Information Technology Management 연계 학위 과정을 이수하며 영어 기반 전공 수업과 협업 환경을 경험하고 있습니다.
+      description: |-
+        Information Technology Management 연계 학위 과정을 이수하며 영어로 전공 수업, 프로젝트들을 수행하고 있습니다.
 
 certification:
   title: Certification
-  intro: >-
-    자격증과 외부 인증은 추후 확정된 정보를 기준으로 업데이트할 예정입니다.
+  intro: |-
+    보유 자격 및 어학 인증입니다.
   items:
-    - name: 업데이트 예정
-      period: "-"
-      description: >-
-        보유 자격증명, 발급 기관, 취득일을 전달해주면 이 영역에 맞춰 정리할 수 있습니다.
+    - name: Cos Pro Python 2급
+      period: "2021.07.18"
+      issuer: YBM
+      description: |-
+        Python 프로그래밍 역량을 평가하는 코딩 전문 자격증입니다.
+    - name: IELTS - Overall Band Score 6.0
+      period: "2024.11.19"
+      issuer: British Council, IDP, Cambridge University
+      description: |-
+        영어 읽기, 듣기, 말하기, 쓰기 능력을 종합 평가하는 공인 영어 시험입니다.
 
 curriculum:
-  title: Curriculum
-  intro: >-
-    AI, 데이터, 클라우드 배포를 실제 서비스 구현 흐름으로 연결하는 학습과 프로젝트 경험입니다.
+  title: Training & Activities
+  intro: |-
+    외부 교육, 개발 커뮤니티, 학과 내 스터디 활동입니다.
   items:
-    - name: IBM x RedHat 부트캠프
-      period: 진행
-      description: >-
-        풀스택 프로젝트, Docker, AWS EC2, GitHub Actions 기반 배포 흐름을 실습하며 서비스 구현과 운영 관점을 학습했습니다.
-    - name: AI 서비스 파이프라인
-      period: 프로젝트
-      description: >-
-        사용자 입력 검증, NLP 구조화, 이미지 품질 검사, 표준 단가 조회, LLM 결과 생성과 검증을 연결하는 단계형 AI 워크플로를 설계했습니다.
-    - name: 대용량 데이터 처리
-      period: 실습
-      description: >-
-        HDFS와 PySpark 기반 데이터 처리, VMware 저장공간 확장 등 데이터 처리 환경 구성 경험을 쌓았습니다.
+    - name: Algorithm Panda World
+      period: "2024.02~2024.09"
+      organizer: 서울과학기술대학교 ITM 전공
+      description: |-
+        같은 학과 학생들과 자체적으로 동아리를 등록해 스터디에서 Java 기반 알고리즘 문제 풀이를 진행했습니다.
+        주 1회 스터디, GitHub Pull Request 기반 코드 공유, 주차별 알고리즘 주제 발표와 코드 리뷰 흐름을 경험했습니다.
+    - name: Operating System Study
+      period: "2024.06~2024.08"
+      organizer: 학과 자체 스터디
+      description: |-
+        학과 선배들과 운영체제 강의를 함께 수강하며 프로세스, 스레드, 메모리, 파일 시스템 등 핵심 개념을 학습했습니다.
+        스터디원들과 개념 발표와 질의응답을 진행하고, 면접 관련 OS 질문을 준비해 답변을 연습했습니다.
+    - name: Google Developer Groups
+      period: "`24.09~`25.03"
+      organizer: GDG Campus Korea
+      description: |-
+        Google 개발자 커뮤니티 활동을 통해 Spring Boot 백엔드 기술 학습과 프로젝트 경험을 공유했습니다.
+    - name: "[IBMxRedHat] AI Transformation AX - Academy"
+      period: "`26.02~`26.08"
+      organizer: 대한상공회의소
+      description: |-
+        K-Digital 훈련과정으로 풀스택 개발 부터 머신러닝, 딥러닝, AI 프레임워크 개발까지 학습하였습니다.
+        AWS 배포 플랫폼 활용에 대해서 학습하였고 프로젝트에 높은 수준으로 적용까지 경험했습니다.
 
 skills:
   title: Skills
-  intro: >-
-    프로젝트에서 사용한 기술을 서비스 구현 흐름 기준으로 정리했습니다.
+  intro: |-
+    프로젝트와 학습경험 기반으로 실제 사용 경험이 있는 기술을 서비스 파트 기준으로 정리했습니다.
+    프로젝트에서 높은 수준으로 활용할 수 있는 기술들은 강조했습니다.
   groups:
     - name: AI / Data
+      icon: fa fa-cogs
       items:
-        - Python
-        - LangChain
-        - LangGraph
-        - ChromaDB
+        - name: PyTorch
+          highlight: true
+          icon: fa fa-fire
+          tone: torch
+        - name: LangChain
+          highlight: true
+          icon: fa fa-link
+          tone: langchain
+        - name: LangGraph
+          highlight: true
+          icon: fa fa-share-alt
+          tone: langgraph
+        - name: ChromaDB
+          highlight: true
+          icon: fa fa-database
+          tone: chroma
+        - name: RAG
+          highlight: true
+          icon: fa fa-search
+          tone: rag
+        - name: NLP
+          highlight: true
+          icon: fa fa-language
+          tone: nlp
+        - OpenCV
+        - Machine Learning
+        - Deep Learning
+        - Transformer
+        - Streamlit
+        - Hadoop / HDFS
         - PySpark
-        - TensorFlow Lite
-    - name: Frontend
+        - Hive / HUE
+    - name: AI Development Environment
+      icon: fa fa-flask
       items:
-        - React
-        - JavaScript
+        - name: Anaconda
+          highlight: true
+          icon: fa fa-leaf
+          tone: anaconda
+        - name: Jupyter Notebook
+          highlight: true
+          icon: fa fa-book
+          tone: jupyter
+        - name: CUDA / GPU Runtime
+          highlight: true
+          icon: fa fa-microchip
+          tone: cuda
+        - Python Virtual Environment
+        - Google Colab
+    - name: Cloud / DevOps
+      icon: fa fa-cloud-upload
+      items:
+        - name: AWS
+          highlight: true
+          icon: devicon-amazonwebservices-original
+          tone: aws
+        - name: Hugging Face
+          highlight: true
+          icon: fa fa-smile-o
+          tone: huggingface
+        - name: Docker
+          highlight: true
+          icon: devicon-docker-plain
+          tone: docker
+        - name: Git Actions
+          highlight: true
+          icon: fa fa-bolt
+          tone: actions
+        - name: Linux
+          highlight: true
+          icon: devicon-linux-plain
+          tone: linux
+        - RDS
+        - AWS EC2
+        - ECS
+        - ECR
+        - S3
+        - CloudFront
+        - Route 53
+        - ALB
+        - Docker Compose
+        - CI/CD
+    - name: Project Management
+      icon: fa fa-tasks
+      items:
+        - name: Git
+          highlight: true
+          icon: devicon-git-plain
+          tone: git
+        - name: Jira
+          highlight: true
+          icon: fa fa-tasks
+          tone: jira
+        - Monday
+        - Notion
+        - API 명세서
+        - 화면 명세서
+        - ERD
+        - Usecase Diagram
+        - Flow Chart
+        - Class Diagram
+        - System Architecture
+    - name: Backend / App
+      icon: fa fa-server
+      items:
+        - name: Python
+          highlight: true
+          icon: devicon-python-plain
+          tone: python
+        - name: FastAPI
+          highlight: true
+          icon: fa fa-rocket
+          tone: fastapi
+        - name: Spring Boot
+          highlight: true
+          icon: fa fa-leaf
+          tone: spring
+        - name: Java
+          highlight: true
+          icon: devicon-java-plain
+          tone: java
+        - Kotlin
+        - Android
+        - Android Studio
+        - Gradle
+        - SQLAlchemy
+        - Alembic
+        - Swagger / OpenAPI
+    - name: Database
+      icon: fa fa-database
+      items:
+        - name: SQL
+          highlight: true
+          icon: fa fa-database
+          tone: sql
+        - name: MySQL
+          highlight: true
+          icon: devicon-mysql-plain
+          tone: mysql
+        - Firebase
+        - Firestore
+        - SQLite
+        - Room DB
+    - name: Frontend
+      icon: fa fa-desktop
+      items:
+        - name: React
+          highlight: true
+          icon: devicon-react-original
+          tone: react
+        - name: JavaScript
+          highlight: true
+          icon: devicon-javascript-plain
+          tone: javascript
+        - Vite
         - HTML
         - CSS
-    - name: Backend / App
-      items:
-        - FastAPI
-        - Spring Boot
-        - Android
-        - Kotlin
-        - Java
-    - name: Database / Cloud
-      items:
-        - Firebase
-        - AWS EC2
-        - Docker
-        - GitHub Actions
-        - Linux
+        - Tailwind CSS
+        - Axios
+        - Node.js
+        - Express.js
+        - PWA
+        - Figma Design

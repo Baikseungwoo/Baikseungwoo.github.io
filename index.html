@@ -2,7 +2,8 @@
 layout: default
 ---
 
-<section id="education" class="resume-section">
+<section id="education" class="resume-section page-section page-section--tint">
+  <div class="section-inner">
   <div class="section-heading">
     <h1>{{ site.data.resume.education.title }}</h1>
     <p>{{ site.data.resume.education.intro }}</p>
@@ -19,9 +20,11 @@ layout: default
     </article>
     {% endfor %}
   </div>
+  </div>
 </section>
 
-<section id="certification" class="resume-section">
+<section id="certification" class="resume-section page-section page-section--white">
+  <div class="section-inner">
   <div class="section-heading">
     <h1>{{ site.data.resume.certification.title }}</h1>
     <p>{{ site.data.resume.certification.intro }}</p>
@@ -29,18 +32,26 @@ layout: default
 
   <div class="resume-list resume-list--compact">
     {% for item in site.data.resume.certification.items %}
-    <article class="resume-item">
+    <article class="resume-item certification-item">
       <div class="resume-item__period">{{ item.period }}</div>
       <div>
         <h2>{{ item.name }}</h2>
-        <p>{{ item.description }}</p>
+        {% if item.issuer %}
+        <div class="resume-meta">
+          <span>발급 기관</span>
+          <strong>{{ item.issuer }}</strong>
+        </div>
+        {% endif %}
+        <p>{{ item.description | newline_to_br }}</p>
       </div>
     </article>
     {% endfor %}
   </div>
+  </div>
 </section>
 
-<section id="curriculum" class="resume-section">
+<section id="curriculum" class="resume-section page-section page-section--tint">
+  <div class="section-inner">
   <div class="section-heading">
     <h1>{{ site.data.resume.curriculum.title }}</h1>
     <p>{{ site.data.resume.curriculum.intro }}</p>
@@ -48,18 +59,26 @@ layout: default
 
   <div class="resume-list">
     {% for item in site.data.resume.curriculum.items %}
-    <article class="resume-item">
+    <article class="resume-item activity-item">
       <div class="resume-item__period">{{ item.period }}</div>
       <div>
         <h2>{{ item.name }}</h2>
+        {% if item.organizer %}
+        <div class="resume-meta">
+          <span>주체 기관</span>
+          <strong>{{ item.organizer }}</strong>
+        </div>
+        {% endif %}
         <p>{{ item.description }}</p>
       </div>
     </article>
     {% endfor %}
   </div>
+  </div>
 </section>
 
-<section id="skills" class="resume-section">
+<section id="skills" class="resume-section page-section page-section--white">
+  <div class="section-inner">
   <div class="section-heading">
     <h1>{{ site.data.resume.skills.title }}</h1>
     <p>{{ site.data.resume.skills.intro }}</p>
@@ -68,18 +87,34 @@ layout: default
   <div class="skill-grid">
     {% for group in site.data.resume.skills.groups %}
     <article class="skill-card">
-      <h2>{{ group.name }}</h2>
+      <h2>
+        {% if group.icon %}
+        <i class="{{ group.icon }}" aria-hidden="true"></i>
+        {% endif %}
+        {{ group.name }}
+      </h2>
       <div class="skill-tags">
         {% for skill in group.items %}
+        {% if skill.name %}
+        <span class="{% if skill.highlight %}is-highlight{% endif %}{% if skill.tone %} tone-{{ skill.tone }}{% endif %}">
+          {% if skill.icon %}
+          <i class="{{ skill.icon }}" aria-hidden="true"></i>
+          {% endif %}
+          {{ skill.name }}
+        </span>
+        {% else %}
         <span>{{ skill }}</span>
+        {% endif %}
         {% endfor %}
       </div>
     </article>
     {% endfor %}
   </div>
+  </div>
 </section>
 
-<section id="projects" class="projects-section">
+<section id="projects" class="projects-section page-section page-section--tint">
+  <div class="section-inner">
   <div class="section-heading">
     <h1>{{ site.data.projects.intro_title }}</h1>
     <p>{{ site.data.projects.intro_body }}</p>
@@ -87,13 +122,29 @@ layout: default
 
   <div class="project-grid">
     {% for project in site.data.projects.items %}
-    <article class="project-card">
+    <article class="project-card{% if project.tone %} project-card--{{ project.tone }}{% endif %}">
       <div class="project-card__meta">{{ project.category }}</div>
       <h2>{{ project.title }}</h2>
+      <div class="project-card__details">
+        {% if project.period %}
+        <span>{{ project.period }}</span>
+        {% endif %}
+        {% if project.role %}
+        <strong>{{ project.role }}</strong>
+        {% endif %}
+      </div>
       <p>{{ project.summary }}</p>
-      <div class="project-card__stack">{{ project.stack }}</div>
-      <a class="project-card__link" target="_blank" rel="noopener noreferrer" href="{{ project.link }}">View project</a>
+      <div class="project-card__stack">
+        {% for stack in project.stack %}
+        <span>{{ stack }}</span>
+        {% endfor %}
+      </div>
+      <a class="project-card__link" href="{{ project.detail_path | relative_url }}">
+        <span>자세히 살펴보기</span>
+        <i class="fa fa-arrow-right" aria-hidden="true"></i>
+      </a>
     </article>
     {% endfor %}
+  </div>
   </div>
 </section>

@@ -11,8 +11,8 @@ body {
     padding: 0;
     font-size: 100%;
     line-height: 1.5;
-    color: #555;
-
+    color: #394656;
+    background: #f6f8fa;
     font-family: 'Antic Slab', serif;
     font-weight: 400;
 }
@@ -49,4 +49,40 @@ a img {
 }
 sup, sub {
     line-height: 0;
+}
+
+section {
+    scroll-margin-top: 150px;
+}
+
+.page-section {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 120px 0;
+    border-top: 1px solid #e6ebf0;
+    box-sizing: border-box;
+}
+
+.page-section--white {
+    background: #fff;
+}
+
+.page-section--tint {
+    background: #f6f8fa;
+}
+
+.section-inner {
+    width: 90%;
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+@media only screen and (max-width: 767px) {
+    .page-section {
+        min-height: auto;
+        padding: 96px 0;
+    }
 }

@@ -1,33 +1,74 @@
-# Expertise section below the hero (icons use Devicon classes bundled in main.css).
-intro_title: About Me
+# About section below the hero.
+intro_title: AI 개발부터 풀스택 구현, 배포까지
+lead: |-
+  AI 모델 개발과 성능 평가, 백엔드 API 설계, 프론트엔드 화면 구현, 클라우드 배포까지
+  서비스가 완성되는 전 과정을 직접 설계하고 구현할 수 있습니다. 
+  더욱이 데이터 전처리 과정까지 수행할 수 있습니다.
+
+highlights:
+  - label: 01
+    icon: fa fa-cogs
+    title: 사용자에게 닿는 AI
+    tags:
+      - Deep Learning
+      - LLM
+      - RAG
+      - LangChain
+      - LangGraph
+      - Fine-tuning
+    body: |-
+      딥러닝 모델 구현, LLM, RAG, LangChain, LangGraph 기반 워크플로,
+      모델 fine-tuning과 성능 평가를 경험했습니다. Streamlit을 활용해
+      AI 모델 성능과 결과를 시각화하는 과정까지 서비스 흐름 안에서 구현할 수 있습니다.
+  - label: 02
+    icon: fa fa-sitemap
+    title: 서비스 전체 흐름 설계
+    tags:
+      - React
+      - FastAPI
+      - Spring Boot
+      - Android
+      - Firebase
+    body: |-
+      React 화면, FastAPI와 Spring Boot API, Android 앱, Firebase 데이터 구조까지
+      전체 흐름을 보며 필요한 부분을 직접 구현합니다.
+  - label: 03
+    icon: fa fa-cloud-upload
+    title: 배포 가능한 결과물
+    tags:
+      - Docker
+      - AWS
+      - GitHub Actions
+      - CI/CD
+      - Linux
+    body: |-
+      Docker, AWS, GitHub Actions 기반으로 실행 환경과 배포 흐름을 함께 생각하며
+      프로젝트가 로컬에만 머물지 않도록 만드는 것을 중요하게 봅니다.
 
 sections:
-  - title: AI & Data
-    body: >-
-      AI 모델을 서비스 흐름에 연결하는 데 관심이 있습니다. LangChain,
-      LangGraph, ChromaDB 기반 RAG 구조, NLP 구조화, 모델 평가,
-      PySpark 데이터 처리 경험을 쌓고 있습니다.
+  - title: AI / Data
+    body: |-
+      LangChain, LangGraph, ChromaDB 기반 RAG 구조와 NLP 구조화,
+      PySpark 데이터 처리 경험을 바탕으로 AI 기능을 서비스 흐름에 연결합니다.
     icons:
       - devicon-python-plain colored
       - devicon-mongodb-plain colored
       - devicon-linux-plain colored
 
-  - title: Service Development
-    body: >-
-      React, Spring Boot, FastAPI, Android 기반 프로젝트를 통해
-      프론트엔드, 백엔드 API, 모바일 앱, 데이터 저장 구조를 함께
-      설계하고 구현합니다.
+  - title: Web / App
+    body: |-
+      React, Spring Boot, FastAPI, Android 프로젝트를 통해 화면, API,
+      모바일 앱, 데이터 저장 구조를 함께 설계하고 구현합니다.
     icons:
       - devicon-react-original colored
       - devicon-java-plain colored
       - devicon-android-plain colored
       - devicon-javascript-plain colored
 
-  - title: Cloud & DevOps
-    body: >-
-      GitHub Actions, Docker, AWS EC2를 활용해 프론트엔드와 백엔드
-      서비스를 분리 배포하고, 실습과 팀 프로젝트에서 CI/CD 흐름을
-      경험했습니다.
+  - title: Cloud / DevOps
+    body: |-
+      Docker, AWS EC2, GitHub Actions를 활용해 서비스를 분리 배포하고,
+      팀 프로젝트에서 CI/CD 흐름과 운영 관점을 경험했습니다.
     icons:
       - devicon-docker-plain colored
       - devicon-git-plain colored

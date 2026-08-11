@@ -3,8 +3,10 @@
   {% include head.html %}
   <body>
       {% include header.html %}
-      <section id="about">
-        {% include about.html %}
+      <section id="about" class="page-section page-section--white">
+        <div class="section-inner">
+          {% include about.html %}
+        </div>
       </section>
         {{ content }}
       {% include footer.html %}

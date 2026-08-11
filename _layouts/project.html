@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: 'ko' }}">
+  {% include head.html %}
+  <body class="project-detail-body">
+    {% assign current_project = nil %}
+    {% for item in site.data.projects.items %}
+      {% if item.detail_path == page.url %}
+        {% assign current_project = item %}
+      {% endif %}
+    {% endfor %}
+
+    {% assign has_pdf = false %}
+    {% if current_project.presentation_pdf %}
+      {% for static_file in site.static_files %}
+        {% if static_file.path == current_project.presentation_pdf %}
+          {% assign has_pdf = true %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    <main class="project-detail{% if current_project.tone %} project-detail--{{ current_project.tone }}{% endif %}">
+      <nav class="project-detail__nav" aria-label="Project navigation">
+        <a class="project-detail__brand" href="{{ '/' | relative_url }}">백승우_ Portfolio</a>
+        <a class="project-detail__back" href="{{ '/#projects' | relative_url }}">
+          <i class="fa fa-arrow-left" aria-hidden="true"></i>
+          Projects
+        </a>
+      </nav>
+
+      {% if current_project %}
+      <section class="project-detail__hero">
+        <div>
+          <span class="project-detail__category">{{ current_project.category }}</span>
+          <h1>{{ current_project.title }}</h1>
+          <p>{{ current_project.summary }}</p>
+        </div>
+      </section>
+
+      <section class="project-detail__layout">
+        <article class="project-detail__content">
+          <div class="project-detail__meta">
+            <article>
+              <span>Period</span>
+              <strong>{{ current_project.period }}</strong>
+            </article>
+            <article>
+              <span>Role</span>
+              <strong>{{ current_project.role }}</strong>
+            </article>
+          </div>
+
+          <div class="project-detail__section">
+            <h2>Problem</h2>
+            <p>{{ current_project.problem }}</p>
+          </div>
+
+          <div class="project-detail__section">
+            <h2>System Architecture</h2>
+            <p>{{ current_project.architecture }}</p>
+          </div>
+
+          <div class="project-detail__section">
+            <h2>Development</h2>
+            <p>{{ current_project.development }}</p>
+          </div>
+
+          <div class="project-detail__section">
+            <h2>Deployment</h2>
+            <p>{{ current_project.deployment }}</p>
+          </div>
+
+          <div class="project-detail__section project-detail__section--trouble">
+            <h2>Troubleshooting</h2>
+            <p>{{ current_project.troubleshooting }}</p>
+          </div>
+
+          <div class="project-detail__section">
+            <h2>Result</h2>
+            <p>{{ current_project.result }}</p>
+          </div>
+
+          <div class="project-detail__section">
+            <h2>Tech Stack</h2>
+            <div class="project-detail__stack">
+              {% for stack in current_project.stack %}
+              <span>{{ stack }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        </article>
+
+        <aside class="project-detail__aside">
+          <div class="project-detail__aside-card">
+            <span>Presentation</span>
+            <h2>발표자료</h2>
+            <p>프로젝트 요약을 먼저 확인한 뒤, 발표자료에서 흐름과 화면을 함께 볼 수 있습니다.</p>
+            <div class="project-detail__side-actions">
+              <a href="#presentation">
+                발표자료 보기
+                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+              </a>
+              {% if has_pdf %}
+              <a href="{{ current_project.presentation_pdf | relative_url }}" download>
+                PDF 다운로드
+                <i class="fa fa-download" aria-hidden="true"></i>
+              </a>
+              {% elsif current_project.presentation_url %}
+              <a href="{{ current_project.presentation_url }}" target="_blank" rel="noopener noreferrer">
+                외부 자료 열기
+                <i class="fa fa-external-link" aria-hidden="true"></i>
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="presentation" class="project-detail__presentation">
+        <div class="project-detail__presentation-head">
+          <div>
+            <span>PDF Preview</span>
+            <h2>발표자료 미리보기</h2>
+          </div>
+          {% if has_pdf %}
+          <a href="{{ current_project.presentation_pdf | relative_url }}" download>
+            다운로드
+            <i class="fa fa-download" aria-hidden="true"></i>
+          </a>
+          {% endif %}
+        </div>
+
+        {% if has_pdf %}
+        <iframe src="{{ current_project.presentation_pdf | relative_url }}" title="{{ current_project.title }} presentation PDF"></iframe>
+        {% else %}
+        <div class="project-detail__pdf-empty">
+          <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+          <h3>PDF 파일을 추가하면 이 영역에 바로 미리보기가 표시됩니다.</h3>
+          <p>{{ current_project.presentation_pdf }} 경로에 PDF를 넣으면 GitHub Pages에서도 미리보기와 다운로드가 자동으로 연결됩니다.</p>
+          {% if current_project.presentation_url %}
+          <a href="{{ current_project.presentation_url }}" target="_blank" rel="noopener noreferrer">현재 발표자료 열기</a>
+          {% endif %}
+        </div>
+        {% endif %}
+      </section>
+      {% else %}
+      <section class="project-detail__hero">
+        <h1>Project not found</h1>
+        <p>프로젝트 정보를 찾을 수 없습니다.</p>
+      </section>
+      {% endif %}
+    </main>
+  </body>
+</html>
