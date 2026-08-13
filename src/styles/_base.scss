@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat|Montserrat+Alternates|Raleway');
-@import url('https://fonts.googleapis.com/css?family=Fredericka+the+Great|Josefin+Slab|Antic+Slab');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 
 * {
     -webkit-font-smoothing: antialiased;
@@ -11,28 +10,32 @@ body {
     padding: 0;
     font-size: 100%;
     line-height: 1.5;
-    color: #394656;
-    background: #f6f8fa;
-    font-family: 'Antic Slab', serif;
+    color: #263342;
+    background:
+        linear-gradient(180deg, rgba(226, 238, 247, 0.85), rgba(247, 250, 252, 0.96) 42%, rgba(255, 255, 255, 0.98)),
+        #f7fafc;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 400;
 }
 article, aside, figcaption, figure, footer, header, nav, section {
     display: block;
 }
 h1, h2, h3, h4, stong {
-    margin-top: 1em;
-    padding-top: 1em;
+    margin-top: 0;
+    padding-top: 0;
     line-height: 1.25;
-    color: #333;
+    color: #17212d;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
 }
 h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
 }
 h2 {
-    font-size: 2rem;
+    font-size: 2.15rem;
 }
 h3 {
-    font-size: 1.5rem;
+    font-size: 1.45rem;
 }
 h4 {
     font-size: 1rem;
@@ -62,16 +65,16 @@ section {
     align-items: center;
     margin: 0;
     padding: 120px 0;
-    border-top: 1px solid #e6ebf0;
+    border-top: 1px solid rgba(26, 34, 44, 0.08);
     box-sizing: border-box;
 }
 
 .page-section--white {
-    background: #fff;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(249, 252, 254, 0.96));
 }
 
 .page-section--tint {
-    background: #f6f8fa;
+    background: linear-gradient(180deg, #edf6fb, #f8fbfd);
 }
 
 .section-inner {

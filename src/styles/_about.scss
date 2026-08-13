@@ -47,7 +47,7 @@
 .about-lead {
   max-width: 780px;
   margin: 0 auto;
-  color: #475569;
+  color: #3f4d5d;
   font-size: 18px;
   line-height: 1.65;
   white-space: pre-line;
@@ -64,58 +64,40 @@
   max-width: 980px;
   margin: 26px auto 0;
   padding: 6px 22px;
-  border: 1px solid #e3e8ee;
+  border: 1px solid rgba(26, 43, 61, 0.12);
   border-radius: 8px;
-  background: #fff;
+  background: linear-gradient(180deg, #ffffff, #f8fcfe);
   box-shadow: 0 16px 34px rgba(26, 34, 44, 0.08);
 }
 
 .about-focus__card {
   padding: 20px 24px;
   border-bottom: 1px solid #edf1f5;
-  display: grid;
-  grid-template-columns: 58px minmax(0, 1fr);
-  gap: 20px;
-  align-items: start;
+  display: block;
 
   &:last-child {
     border-bottom: 0;
   }
 
   @media only screen and (max-width: 620px) {
-    grid-template-columns: 1fr;
-    gap: 14px;
     padding: 24px 0;
   }
 
   h2 {
     margin: 0;
     padding: 0;
-    color: #1f2933;
-    font-size: 26px;
-    font-weight: 800;
+    color: #17212d;
+    font-size: 30px;
+    font-weight: 900;
   }
 
   p {
     margin: 10px 0 0;
-    color: #4b5563;
-    font-size: 16px;
-    line-height: 1.62;
+    color: #3f4d5d;
+    font-size: 17px;
+    line-height: 1.7;
     white-space: pre-line;
   }
-}
-
-.about-focus__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 58px;
-  height: 58px;
-  border: 2px solid #cfe0e8;
-  border-radius: 14px;
-  background: #f2f7fa;
-  color: #2f6f88;
-  font-size: 27px;
 }
 
 .about-focus__head {
@@ -132,7 +114,7 @@
     height: 26px;
     padding: 0 9px;
     border-radius: 999px;
-    background: #1f2933;
+    background: #2f6f88;
     color: #fff;
     font-family: 'Montserrat', sans-serif;
     font-size: 12px;

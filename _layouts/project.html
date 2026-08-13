@@ -49,44 +49,205 @@
             </article>
           </div>
 
-          <div class="project-detail__section">
-            <h2>Problem</h2>
-            <p>{{ current_project.problem }}</p>
+          <div class="project-detail__section project-detail__section--intro">
+            <div>
+              <span class="project-detail__eyebrow">Overview</span>
+              <h2>문제에서 서비스 흐름까지</h2>
+              <p>{{ current_project.problem }}</p>
+            </div>
+            {% if current_project.problem_visual %}
+            <figure class="project-detail__inline-visual">
+              <img src="{{ current_project.problem_visual.image | relative_url }}" alt="{{ current_project.problem_visual.title }}">
+              <figcaption>{{ current_project.problem_visual.caption }}</figcaption>
+            </figure>
+            {% endif %}
           </div>
 
           <div class="project-detail__section">
-            <h2>System Architecture</h2>
+            <span class="project-detail__eyebrow">Architecture</span>
+            <h2>서비스 · 배포 아키텍처</h2>
+            {% if current_project.architecture_visual %}
+            <figure class="project-detail__wide-visual">
+              <img src="{{ current_project.architecture_visual.image | relative_url }}" alt="{{ current_project.architecture_visual.title }}">
+              <figcaption>{{ current_project.architecture_visual.caption }}</figcaption>
+            </figure>
+            {% endif %}
             <p>{{ current_project.architecture }}</p>
+            <p class="project-detail__support-copy">{{ current_project.deployment }}</p>
+            {% if current_project.architecture_nodes %}
+            <div class="project-detail__icon-grid">
+              {% for node in current_project.architecture_nodes %}
+              <article>
+                <i class="{{ node.icon }}" aria-hidden="true"></i>
+                <h3>{{ node.title }}</h3>
+                <p>{{ node.body }}</p>
+              </article>
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% if current_project.aws_pipeline %}
+            <div class="project-detail__icon-grid project-detail__icon-grid--compact">
+              {% for step in current_project.aws_pipeline %}
+              <article>
+                <i class="{{ step.icon }}" aria-hidden="true"></i>
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.body }}</p>
+              </article>
+              {% endfor %}
+            </div>
+            {% endif %}
           </div>
 
           <div class="project-detail__section">
-            <h2>Development</h2>
+            <span class="project-detail__eyebrow">Role</span>
+            <h2>설계와 구현 범위</h2>
             <p>{{ current_project.development }}</p>
           </div>
 
-          <div class="project-detail__section">
-            <h2>Deployment</h2>
-            <p>{{ current_project.deployment }}</p>
+          {% if current_project.ai_pipeline %}
+          <div class="project-detail__section project-detail__section--accent">
+            <span class="project-detail__eyebrow">AI Core</span>
+            <h2>AI 견적 · RAG 리스크 리포트</h2>
+            {% if current_project.ai_visuals %}
+            <div class="project-detail__visual-pair">
+              {% for visual in current_project.ai_visuals %}
+              <figure>
+                <img src="{{ visual.image | relative_url }}" alt="{{ visual.title }}">
+                <figcaption>{{ visual.caption }}</figcaption>
+              </figure>
+              {% endfor %}
+            </div>
+            {% endif %}
+            <div class="project-detail__timeline">
+              {% for step in current_project.ai_pipeline %}
+              <article>
+                <span><i class="{{ step.icon }}" aria-hidden="true"></i></span>
+                <div>
+                  <h3>{{ step.title }}</h3>
+                  <p>{{ step.body }}</p>
+                </div>
+              </article>
+              {% endfor %}
+            </div>
           </div>
+          {% endif %}
 
           <div class="project-detail__section project-detail__section--trouble">
-            <h2>Troubleshooting</h2>
-            <p>{{ current_project.troubleshooting }}</p>
+            <span class="project-detail__eyebrow">Troubleshooting</span>
+            <h2>문제 해결 과정</h2>
+            {% if current_project.troubleshooting_items %}
+            <div class="project-detail__trouble-grid">
+              {% for item in current_project.troubleshooting_items %}
+              <article>
+                {% if item.logo %}
+                <span class="project-detail__trouble-logo">
+                  <img src="{{ item.logo | relative_url }}" alt="{{ item.logo_alt | default: item.title }}">
+                </span>
+                {% elsif item.icon %}
+                <span class="project-detail__trouble-logo">
+                  <i class="{{ item.icon }}" aria-hidden="true"></i>
+                </span>
+                {% endif %}
+                <h3>{{ item.title }}</h3>
+                <dl>
+                  <dt>Problem</dt>
+                  <dd>{{ item.problem }}</dd>
+                  <dt>Solution</dt>
+                  <dd>{{ item.solution }}</dd>
+                </dl>
+              </article>
+              {% endfor %}
+            </div>
+            {% endif %}
           </div>
 
+          {% if current_project.leadership or current_project.deliverables %}
           <div class="project-detail__section">
-            <h2>Result</h2>
+            <span class="project-detail__eyebrow">Leadership</span>
+            <h2>팀장으로서 설계한 것들</h2>
+            {% if current_project.management_visual %}
+            <figure class="project-detail__wide-visual project-detail__wide-visual--soft">
+              <img src="{{ current_project.management_visual.image | relative_url }}" alt="{{ current_project.management_visual.title }}">
+              <figcaption>{{ current_project.management_visual.caption }}</figcaption>
+            </figure>
+            {% endif %}
+            {% if current_project.leadership %}
+            <div class="project-detail__leadership">
+              {% for item in current_project.leadership %}
+              <article>
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.body }}</p>
+              </article>
+              {% endfor %}
+            </div>
+            {% endif %}
+            {% if current_project.deliverables %}
+            <div class="project-detail__deliverables">
+              {% for item in current_project.deliverables %}
+              <span>
+                <i class="{{ item.icon }}" aria-hidden="true"></i>
+                {{ item.title }}
+              </span>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+          {% endif %}
+
+          <div class="project-detail__section">
+            <span class="project-detail__eyebrow">Result</span>
+            <h2>프로젝트 결과</h2>
             <p>{{ current_project.result }}</p>
           </div>
 
           <div class="project-detail__section">
-            <h2>Tech Stack</h2>
+            <span class="project-detail__eyebrow">Stack</span>
+            <h2>기술 스택</h2>
+            {% if current_project.tech_groups %}
+            <div class="project-detail__tech-groups">
+              {% for group in current_project.tech_groups %}
+              <article>
+                <h3>
+                  <i class="{{ group.icon }}" aria-hidden="true"></i>
+                  {{ group.title }}
+                </h3>
+                <div>
+                  {% for item in group.items %}
+                  <span>
+                    <i class="{{ item.icon }}" aria-hidden="true"></i>
+                    {{ item.name }}
+                  </span>
+                  {% endfor %}
+                </div>
+              </article>
+              {% endfor %}
+            </div>
+            {% else %}
             <div class="project-detail__stack">
               {% for stack in current_project.stack %}
               <span>{{ stack }}</span>
               {% endfor %}
             </div>
+            {% endif %}
           </div>
+
+          {% if current_project.visual_assets %}
+          <div class="project-detail__section">
+            <span class="project-detail__eyebrow">Appendix</span>
+            <h2>설계 · 검증 자료</h2>
+            <div class="project-detail__visuals">
+              {% for visual in current_project.visual_assets %}
+              <figure>
+                <img src="{{ visual.image | relative_url }}" alt="{{ visual.title }}">
+                <figcaption>
+                  <strong>{{ visual.title }}</strong>
+                  <span>{{ visual.caption }}</span>
+                </figcaption>
+              </figure>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
         </article>
 
         <aside class="project-detail__aside">
