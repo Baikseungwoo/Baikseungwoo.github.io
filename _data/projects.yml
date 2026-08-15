@@ -440,23 +440,188 @@ items:
     detail_path: /projects/oct-retinal-classification/
     period: "2025.10~2025.11"
     role: 개인 프로젝트 / CNN 모델 설계 / 성능 비교
-    summary: OCT 망막 이미지를 4개 클래스로 분류하고 SE-Residual 구조로 테스트 정확도를 약 99%까지 개선한 딥러닝 프로젝트입니다.
-    problem: OCT 망막 이미지는 질환별 차이가 미세해 단순 CNN만으로는 클래스 간 혼동이 발생할 수 있어, 특징 추출 성능을 높이는 모델 구조가 필요했습니다.
-    architecture: Baseline CNN과 SE-Residual 기반 개선 모델을 같은 데이터 분할과 학습 조건에서 비교하는 실험 구조로 설계했습니다.
-    development: 학습 이미지를 Train/Validation으로 나누고 Grayscale, Resize, 정규화, RandomResizedCrop, Flip, Rotation 증강을 적용했습니다.
-    deployment: 서비스 배포보다는 Jupyter Notebook 기반 실험 환경에서 모델 학습, 검증, 성능 지표 산출까지 재현 가능한 형태로 정리했습니다.
-    troubleshooting: 시각적으로 유사한 CNV와 DME 간 오분류를 줄이기 위해 Residual Connection과 SE Block을 적용해 채널별 중요 특징에 집중하도록 개선했습니다.
-    result: Baseline 약 94%에서 SE-Residual 개선 모델 약 99% 테스트 정확도를 달성하고 Confusion Matrix로 오분류 패턴을 분석했습니다.
+    summary: OCT2017 망막 단층촬영 이미지를 CNV, DME, DRUSEN, NORMAL 4개 클래스로 분류하고, Baseline CNN 대비 SE-ResBlock OCTNet으로 테스트 정확도를 0.94에서 0.99까지 개선한 딥러닝 모델링 프로젝트입니다.
+    overview_title: 의료 이미지 분류 문제와 실험 목표
+    problem: OCT 망막 이미지는 질환별 구조 차이가 미세하고 CNV, DME, DRUSEN처럼 시각적으로 겹치는 패턴이 존재합니다. 이 프로젝트에서는 단순 CNN을 기준 모델로 두고, Residual Connection과 Squeeze-and-Excitation Attention을 적용한 개선 모델을 설계해 질환 특징을 더 안정적으로 분류할 수 있는지 검증했습니다.
+    architecture_label: Experiment
+    architecture_title: 모델 실험 아키텍처
+    architecture: OCT2017 데이터셋을 Train/Validation/Test로 분리하고, Grayscale 변환, 224x224 Resize, 정규화, RandomResizedCrop, Flip, Rotation 증강을 적용했습니다. 이후 Baseline CNN과 SE-ResBlock OCTNet을 동일한 하이퍼파라미터로 학습해 구조 변경이 성능에 미치는 영향을 비교했습니다.
+    development: PyTorch 기반으로 Dataset, Transform, DataLoader, Baseline CNN, SEBlock, SEResidualBlock, 학습 루프, 평가 함수를 직접 구현했습니다. 학습 과정에서는 loss, accuracy, epoch time을 기록하고, 테스트 단계에서는 classification report, confusion matrix, failure case visualization까지 확인했습니다.
+    deployment: 서비스 배포 프로젝트는 아니지만, Jupyter Notebook에서 데이터 준비, 모델 구현, 학습 로그, 평가 결과, 시각화까지 재현 가능한 실험 문서 형태로 정리했습니다. 최종 노트북은 포트폴리오 발표자료 PDF로 변환해 상세 페이지에서 바로 확인할 수 있게 구성했습니다.
+    troubleshooting: Baseline CNN은 일부 질환 클래스에서 오분류가 발생했고, 특히 CNV와 DME/DRUSEN처럼 병변 패턴이 유사한 이미지에서 혼동이 컸습니다. 이를 줄이기 위해 더 깊은 특징 추출이 가능한 Residual 구조와 채널 중요도를 조절하는 SE Attention을 적용했습니다.
+    result: Baseline CNN은 테스트 정확도 0.94를 달성했고, 개선 모델인 SE-ResBlock OCTNet은 테스트 정확도 0.99와 macro F1-score 0.99를 달성했습니다. NORMAL 클래스는 250/250으로 완전 분류됐고, 전체 오분류는 14개 수준으로 줄어들었습니다.
+    metrics:
+      - label: Test Accuracy
+        value: "0.99"
+      - label: Accuracy Gain
+        value: "+5%p"
+      - label: Test Images
+        value: "1,000"
+      - label: Failure Cases
+        value: "14"
+    problem_visual:
+      image: /assets/projects/oct-retinal-classification/notebook-cell-04-output-2.png
+      title: OCT2017 class samples
+      caption: CNV, DME, DRUSEN, NORMAL 4개 클래스의 OCT 샘플 이미지를 확인하고 분류 문제의 시각적 차이를 파악했습니다.
+    architecture_visual:
+      image: /assets/projects/oct-retinal-classification/experiment-architecture.svg
+      title: OCT model experiment architecture
+      caption: OCT2017 데이터 입력부터 전처리, 증강, Baseline CNN과 SE-ResBlock OCTNet 비교, 최종 평가까지의 실험 흐름입니다.
+    architecture_secondary_visual:
+      image: /assets/projects/oct-retinal-classification/notebook-cell-18-markdown-1.png
+      title: Baseline CNN architecture
+      caption: 기준 모델은 4개의 convolution block과 global average pooling 기반 classifier로 구성했습니다.
+    architecture_nodes:
+      - icon: fa fa-database
+        title: OCT2017 Dataset
+        body: Mendeley Data의 OCT2017 데이터셋을 사용해 CNV, DME, DRUSEN, NORMAL 4개 클래스를 분류했습니다.
+      - icon: fa fa-sliders
+        title: Preprocessing
+        body: Grayscale, 224x224 Resize, Tensor 변환, mean/std 정규화로 입력 이미지를 표준화했습니다.
+      - icon: fa fa-random
+        title: Augmentation
+        body: RandomResizedCrop, HorizontalFlip, Rotation을 적용해 모델이 특정 위치나 각도에 과적합되지 않도록 했습니다.
+      - icon: fa fa-cubes
+        title: Baseline CNN
+        body: 4개 Conv Block, BatchNorm, ReLU, MaxPool, GAP, Linear classifier로 기준 성능을 측정했습니다.
+      - icon: fa fa-bolt
+        title: SE-ResBlock OCTNet
+        body: Residual Connection과 SE Attention을 결합해 질환 관련 채널 특징에 더 집중하도록 개선했습니다.
+      - icon: fa fa-bar-chart
+        title: Evaluation
+        body: Accuracy, Precision, Recall, F1-score, Confusion Matrix, Failure Case를 함께 확인했습니다.
+    ai_title: 학습과 평가 흐름
+    ai_visuals:
+      - image: /assets/projects/oct-retinal-classification/notebook-cell-42-output-1.png
+        title: Loss curve
+        caption: Baseline과 개선 모델의 train/validation loss를 비교해 수렴 안정성을 확인했습니다.
+      - image: /assets/projects/oct-retinal-classification/notebook-cell-52-output-1.png
+        title: Confusion matrix
+        caption: 테스트셋 1,000장 기준 Baseline과 SE-ResBlock OCTNet의 클래스별 오분류 패턴을 비교했습니다.
+    ai_pipeline:
+      - icon: fa fa-folder-open
+        title: 데이터셋 구성
+        body: 원본 train set을 train/validation으로 나누고, 독립 test set 1,000장은 최종 평가 전용으로 유지했습니다.
+      - icon: fa fa-image
+        title: 전처리와 증강
+        body: OCT 이미지를 단일 채널로 표준화하고, 학습 데이터에만 crop, flip, rotation 증강을 적용했습니다.
+      - icon: fa fa-code
+        title: 모델 직접 구현
+        body: Baseline CNN, SEBlock, SEResidualBlock, SEResBlockOCTNet을 PyTorch 모듈로 직접 구현했습니다.
+      - icon: fa fa-line-chart
+        title: 학습 로그 기록
+        body: 20 epoch 동안 train/validation loss와 accuracy, epoch time을 기록해 두 모델의 학습 안정성을 비교했습니다.
+      - icon: fa fa-check-circle
+        title: 테스트 평가
+        body: classification report와 confusion matrix를 통해 per-class precision, recall, F1-score를 확인했습니다.
+    troubleshooting_items:
+      - title: 유사 질환 클래스 오분류
+        icon: fa fa-eye
+        problem: CNV, DME, DRUSEN은 OCT 구조가 부분적으로 비슷해 Baseline CNN에서 클래스 간 혼동이 발생했습니다.
+        solution: Residual Connection으로 깊은 특징 추출을 안정화하고 SE Attention으로 질환 관련 채널의 중요도를 강조했습니다.
+      - title: 과적합 가능성 관리
+        icon: fa fa-random
+        problem: 의료 이미지는 촬영 위치와 스케일 차이에 민감해 특정 패턴을 외우는 방식으로 학습될 수 있습니다.
+        solution: 학습 데이터에만 RandomResizedCrop, HorizontalFlip, Rotation을 적용하고 validation/test에는 고정 transform을 사용했습니다.
+      - title: 평가 신뢰도 확보
+        icon: fa fa-check-square-o
+        problem: 검증 데이터로만 성능을 판단하면 모델 선택 과정의 편향이 최종 결과에 섞일 수 있습니다.
+        solution: train/validation split과 별도로 독립 test set 1,000장을 유지하고 최종 classification report와 confusion matrix를 산출했습니다.
+      - title: 실패 사례 해석
+        icon: fa fa-search
+        problem: 정확도만으로는 어떤 이미지에서 모델이 실패하는지 알기 어렵습니다.
+        solution: 개선 모델의 오분류 14개를 직접 시각화해 CNV-DME, CNV-DRUSEN 간 혼동이 남아 있음을 확인했습니다.
+    leadership_label: Output
+    leadership_title: 구현 산출물
+    management_visual:
+      image: /assets/projects/oct-retinal-classification/notebook-cell-61-output-1.png
+      title: Accuracy and macro F1 comparison
+      caption: Baseline과 개선 모델의 Accuracy, Macro F1-score를 요약 비교한 최종 결과 그래프입니다.
+    leadership:
+      - title: 모델 구조 구현
+        body: Baseline CNN과 SE-ResBlock OCTNet을 직접 구현하고 동일 조건에서 학습해 구조 개선 효과를 비교했습니다.
+      - title: 실험 재현성 정리
+        body: optimizer, loss function, learning rate, weight decay, batch size, epoch 수를 config로 정리하고 로그로 남겼습니다.
+      - title: 결과 해석
+        body: learning curve, confusion matrix, failure case를 함께 분석해 단순 정확도 이상의 모델 개선 근거를 정리했습니다.
+    deliverables:
+      - title: PyTorch Model Code
+        icon: fa fa-code
+      - title: Training Loop
+        icon: fa fa-refresh
+      - title: Classification Report
+        icon: fa fa-file-text-o
+      - title: Confusion Matrix
+        icon: fa fa-th
+      - title: Failure Case Analysis
+        icon: fa fa-search
+      - title: Notebook PDF
+        icon: fa fa-file-pdf-o
     highlights:
       - OCT2017 데이터셋을 학습/검증/테스트 기준으로 구성하고 이미지 전처리와 증강을 적용했습니다.
       - Baseline CNN과 SE-Residual 기반 개선 모델을 동일 조건에서 비교했습니다.
       - Accuracy, Precision, Recall, F1-score, Confusion Matrix로 모델 성능을 분석했습니다.
-    stack:
-      - Python
-      - PyTorch
-      - CNN
-      - Jupyter
-      - CUDA/GPU
+    tech_groups:
+      - title: Model
+        icon: fa fa-cubes
+        items:
+          - name: Python
+            icon: devicon-python-plain
+          - name: PyTorch
+            icon: fa fa-fire
+          - name: Torchvision
+            icon: fa fa-image
+          - name: CNN
+            icon: fa fa-cubes
+          - name: SE Attention
+            icon: fa fa-bolt
+          - name: Residual Block
+            icon: fa fa-link
+      - title: Data & Evaluation
+        icon: fa fa-bar-chart
+        items:
+          - name: OCT2017
+            icon: fa fa-database
+          - name: scikit-learn
+            icon: fa fa-check-square-o
+          - name: NumPy
+            icon: fa fa-calculator
+          - name: Matplotlib
+            icon: fa fa-line-chart
+          - name: Seaborn
+            icon: fa fa-th
+      - title: Experiment Environment
+        icon: fa fa-laptop
+        items:
+          - name: Jupyter Notebook
+            icon: fa fa-book
+          - name: CUDA/GPU
+            icon: fa fa-bolt
+          - name: Google Cloud VM
+            icon: fa fa-cloud
+          - name: DataLoader
+            icon: fa fa-refresh
+          - name: ImageFolder
+            icon: fa fa-folder-open
+    visual_assets:
+      - title: Preprocessing 결과
+        image: /assets/projects/oct-retinal-classification/notebook-cell-10-output-2.png
+        caption: 원본 이미지와 eval/train transform 적용 결과를 비교해 전처리 흐름이 정상적으로 동작하는지 확인했습니다.
+      - title: Data Augmentation
+        image: /assets/projects/oct-retinal-classification/notebook-cell-14-output-2.png
+        caption: RandomResizedCrop, Flip, Rotation을 적용한 학습 샘플을 시각화해 증강 범위를 점검했습니다.
+      - title: SE Attention 구조
+        image: /assets/projects/oct-retinal-classification/notebook-cell-20-markdown-1.png
+        caption: Residual Connection과 SE Attention을 결합해 채널별 중요 특징을 강조하는 개선 구조를 설계했습니다.
+      - title: Accuracy Curve
+        image: /assets/projects/oct-retinal-classification/notebook-cell-42-output-2.png
+        caption: 개선 모델이 Baseline보다 높은 validation accuracy에 도달하며 더 강한 일반화 성능을 보였습니다.
+      - title: Failure Case
+        image: /assets/projects/oct-retinal-classification/notebook-cell-56-output-2.png
+        caption: 개선 모델이 틀린 14개 샘플 중 일부를 확인해 CNV-DME, CNV-DRUSEN 간 혼동이 남아 있음을 분석했습니다.
+      - title: Training Time
+        image: /assets/projects/oct-retinal-classification/notebook-cell-61-output-2.png
+        caption: 개선 모델은 Baseline과 비슷한 학습 시간 범위에서 더 높은 성능을 달성했습니다.
     link: https://drive.google.com/file/d/1QKTKYXi_Ljb7BH3T6wlZ2P0IbtnUNoPB/view?usp=sharing
     presentation_url: https://drive.google.com/file/d/1QKTKYXi_Ljb7BH3T6wlZ2P0IbtnUNoPB/view?usp=sharing
     presentation_pdf: /assets/projects/oct-retinal-classification.pdf

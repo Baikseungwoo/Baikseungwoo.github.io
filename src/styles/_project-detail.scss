@@ -391,8 +391,14 @@
   }
 
   .project-detail__node-logo {
-    padding: 8px;
-    object-fit: contain;
+    flex: 0 0 42px;
+
+    img {
+      display: block;
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+    }
   }
 
   h3 {
@@ -422,12 +428,25 @@
     min-height: 138px;
   }
 
-  i {
+  i,
+  .project-detail__node-logo {
     grid-row: span 2;
     width: 52px;
     height: 52px;
     margin-bottom: 0;
+  }
+
+  i {
     font-size: 26px;
+  }
+
+  .project-detail__node-logo {
+    flex-basis: 52px;
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
   }
 
   h3,

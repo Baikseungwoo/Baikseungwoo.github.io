@@ -48,11 +48,21 @@
               <strong>{{ current_project.role }}</strong>
             </article>
           </div>
+          {% if current_project.metrics %}
+          <div class="project-detail__metrics">
+            {% for metric in current_project.metrics %}
+            <article>
+              <span>{{ metric.label }}</span>
+              <strong>{{ metric.value }}</strong>
+            </article>
+            {% endfor %}
+          </div>
+          {% endif %}
 
           <div class="project-detail__section project-detail__section--intro">
             <div>
               <span class="project-detail__eyebrow">Overview</span>
-              <h2>문제에서 서비스 흐름까지</h2>
+              <h2>{{ current_project.overview_title | default: "문제에서 서비스 흐름까지" }}</h2>
               <p>{{ current_project.problem }}</p>
             </div>
             {% if current_project.problem_visual %}
@@ -64,8 +74,8 @@
           </div>
 
           <div class="project-detail__section">
-            <span class="project-detail__eyebrow">Architecture</span>
-            <h2>서비스 · 배포 아키텍처</h2>
+            <span class="project-detail__eyebrow">{{ current_project.architecture_label | default: "Architecture" }}</span>
+            <h2>{{ current_project.architecture_title | default: "서비스 · 배포 아키텍처" }}</h2>
             {% if current_project.architecture_visual %}
             <figure class="project-detail__wide-visual">
               <img src="{{ current_project.architecture_visual.image | relative_url }}" alt="{{ current_project.architecture_visual.title }}">
@@ -85,7 +95,9 @@
               {% for node in current_project.architecture_nodes %}
               <article>
                 {% if node.logo %}
-                <img class="project-detail__node-logo" src="{{ node.logo | relative_url }}" alt="{{ node.logo_alt | default: node.title }}">
+                <span class="project-detail__node-logo">
+                  <img src="{{ node.logo | relative_url }}" alt="{{ node.logo_alt | default: node.title }}">
+                </span>
                 {% else %}
                 <i class="{{ node.icon }}" aria-hidden="true"></i>
                 {% endif %}
@@ -100,7 +112,9 @@
               {% for step in current_project.aws_pipeline %}
               <article>
                 {% if step.logo %}
-                <img class="project-detail__node-logo" src="{{ step.logo | relative_url }}" alt="{{ step.logo_alt | default: step.title }}">
+                <span class="project-detail__node-logo">
+                  <img src="{{ step.logo | relative_url }}" alt="{{ step.logo_alt | default: step.title }}">
+                </span>
                 {% else %}
                 <i class="{{ step.icon }}" aria-hidden="true"></i>
                 {% endif %}
