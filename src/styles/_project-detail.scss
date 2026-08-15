@@ -343,6 +343,11 @@
   @media only screen and (min-width: $cut) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  img {
+    max-height: 720px;
+    object-fit: contain;
+  }
 }
 
 .project-detail__icon-grid,
@@ -665,6 +670,13 @@
     color: currentColor;
     font-size: 15px;
   }
+
+  span img {
+    width: 17px;
+    height: 17px;
+    object-fit: contain;
+    flex: 0 0 auto;
+  }
 }
 
 .project-detail__tech-groups article:nth-child(1) span:nth-child(1) { background: #2563eb; }
@@ -721,7 +733,7 @@
     display: block;
     width: 100%;
     min-height: 210px;
-    object-fit: cover;
+    object-fit: contain;
     background: #f8fafc;
   }
 
@@ -742,6 +754,31 @@
     font-size: 15px;
     line-height: 1.65;
   }
+}
+
+.project-detail__video {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border: 1px solid rgba(47, 111, 136, 0.16);
+  border-radius: 8px;
+  background: #0f172a;
+  box-shadow: 0 16px 32px rgba(26, 34, 44, 0.12);
+  aspect-ratio: 16 / 9;
+
+  iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+.project-detail__video--vertical {
+  width: min(420px, 100%);
+  margin: 0 auto;
+  aspect-ratio: 9 / 16;
 }
 
 .project-detail__side-actions {

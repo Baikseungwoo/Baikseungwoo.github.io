@@ -242,18 +242,180 @@ items:
     tone: mobile
     detail_path: /projects/chalkak-app/
     period: "2025.09~2025.12"
-    role: 객체 인식 모델 임베딩 / 학습 플로우 연동
-    summary: 온디바이스 객체 인식을 영어 단어 학습, GPT 예문 생성, 발음 학습, 퀴즈 복습으로 연결한 Android 앱입니다.
-    problem: 어린이가 일상 속 사물을 직접 촬영하며 영어 단어를 학습할 수 있도록, 단순 암기보다 사진 기반 경험으로 이어지는 학습 흐름을 만들고자 했습니다.
-    architecture: Android 앱 내부에 TensorFlow Lite 모델을 포함하고, Room DB와 Firestore를 함께 사용하는 Local-first 구조로 학습 데이터를 관리했습니다.
-    development: ObjectDetectionHelper를 구현해 모델 로드, 이미지 변환, 추론 과정을 모듈화하고 Label, Confidence Score, Bounding Box 결과를 학습 화면과 연결했습니다.
-    deployment: 모바일 앱 내부에서 객체 인식이 동작하도록 모델을 assets에 포함했고, Firebase Authentication, Firestore, Functions, Cloud Messaging을 연동했습니다.
-    troubleshooting: 신규 단어나 예문이 부족한 경우에만 GPT API를 호출하도록 구성해 중복 요청을 줄이고, Room DB와 Firestore 동기화 기준을 분리했습니다.
-    result: 사진 촬영, 객체 인식, 단어/예문 학습, 발음 연습, 퀴즈 복습까지 앱 안에서 이어지는 모바일 AI 학습 플로우를 완성했습니다.
+    role: 객체 인식 모델 연동 / TTS 기능 / 가속도 센서 기반 Quick Snap 구현
+    summary: 아이들이 주변 사물을 직접 찍으며 영어를 익힐 수 있도록, 사진 속 객체를 영어 단어 카드, GPT 예문, 발음 연습, 퀴즈 복습으로 연결한 Android AI 학습 앱입니다.
+    problem: Chalkak은 아이를 위한 사진 기반 영어 공부 앱입니다. 단어장을 외우는 방식은 실제 사물과 학습 맥락이 분리되기 쉬워, 사용자가 직접 촬영한 사물을 학습 카드로 바꾸고 예문·발음·복습까지 이어지는 모바일 학습 흐름으로 설계했습니다.
+    architecture: Single Activity와 Multi Fragment 구조를 기반으로 Home, Log, Quiz, Settings, Magic Adventure 화면을 분리했습니다. 앱 내부에는 TensorFlow EfficientDet-Lite0 모델을 포함하고, Room DB와 Firestore를 함께 사용해 로컬 우선 학습 기록과 클라우드 사용자 데이터를 관리했습니다.
+    deployment: 객체 인식은 Android 앱 내부 assets에 포함된 TensorFlow Lite 모델로 온디바이스 추론되며, Firebase Authentication, Firestore, Cloud Functions, Cloud Messaging을 연동해 로그인, 토큰 저장, GPT 예문 생성, 알림 흐름을 구성했습니다.
+    role_title: 담당 구현 범위
+    development: 담당 범위는 객체 인식 모델을 카메라·갤러리 이미지 흐름과 연결하는 작업, 영어 단어/예문을 읽어주는 TTS 기능, 흔들기 동작으로 카메라를 실행하는 가속도 센서 기능이었습니다. ObjectDetectionHelper를 통해 모델 로딩, 이미지 전처리, 추론 결과 파싱, Label·Confidence·Bounding Box 전달 과정을 분리해 학습 화면에서 바로 사용할 수 있게 구현했습니다.
+    ai_title: 사진에서 단어 카드까지
+    troubleshooting: 카메라 URI, 온디바이스 모델 추론, 음성 기능, GPT 예문 생성, 로컬/클라우드 저장 흐름이 한 화면 경험 안에서 이어져야 했기 때문에 각 기능의 책임을 분리하고 실패 지점을 화면 흐름에 맞춰 처리했습니다.
+    result: 촬영 또는 갤러리 선택, 객체 인식, 단어 카드 생성, GPT 예문 확인, TTS/STT 발음 연습, 캘린더 기록, 퀴즈 복습까지 이어지는 모바일 AI 영어 학습 프로토타입을 완성했습니다.
+    problem_visual:
+      image: /assets/projects/chalkak/crops/chalkak-dragon-logo.png
+      title: Chalkak dragon logo
+      caption: Chalkak의 마법사 드래곤 로고입니다.
+    architecture_visual:
+      image: /assets/projects/chalkak/crops/architecture-flow-diagram.png
+      title: Chalkak architecture flow
+      caption: Android Client, TFLite 온디바이스 추론, Room DB, Firebase Backend, OpenAI API가 이어지는 전체 흐름입니다.
+    architecture_secondary_visual:
+      image: /assets/projects/chalkak/tech-stack-slide.png
+      title: Chalkak technology stack
+      caption: Android, TensorFlow Lite, Firebase, Node.js, Room DB, Firestore, Android Studio, Git, OpenAI API로 구성한 프로젝트 기술 스택입니다.
+    architecture_nodes:
+      - icon: fa fa-mobile
+        title: Single Activity 구조
+        body: MainActivity가 하단 내비게이션과 공통 UI를 담당하고, 학습·기록·퀴즈·설정 화면은 Fragment로 분리했습니다.
+      - icon: fa fa-camera
+        title: Camera / Gallery 입력
+        body: Activity Result API와 FileProvider 기반 content URI를 사용해 카메라 촬영과 갤러리 이미지 선택 흐름을 안정적으로 연결했습니다.
+      - icon: fa fa-database
+        title: RoomDB + Firestore
+        body: 학습 로그는 로컬 Room DB에 빠르게 저장하고, 사용자 정보와 토큰은 Firebase Firestore에 저장하는 구조로 관리했습니다.
+      - icon: fa fa-cloud
+        title: Firebase Backend
+        body: Google Sign-In, Firebase Auth, FCM token, Cloud Functions를 활용해 인증·알림·GPT API 호출 흐름을 구성했습니다.
+      - icon: fa fa-volume-up
+        title: TTS / STT 학습
+        body: Android TextToSpeech와 SpeechRecognizer를 활용해 단어를 듣고 직접 말하며 정확도를 확인할 수 있게 했습니다.
+      - icon: fa fa-bolt
+        title: Sensor Quick Snap
+        body: SensorManager로 가속도 값을 계산해 일정 G-force 이상 흔들림을 감지하면 카메라를 빠르게 실행하도록 구현했습니다.
+    ai_visuals:
+      - image: /assets/projects/chalkak/ui/detection-result-bbox.png
+        title: Detection result with bounding box
+        caption: 촬영 이미지에서 객체를 감지하고 bounding box로 선택할 수 있게 표시하는 Detection Result 화면입니다.
+      - image: /assets/projects/chalkak/ui/detection-result-card.png
+        title: Word card learning UI
+        caption: 선택한 객체를 단어, 뜻, 예문, TTS/STT 발음 학습으로 연결하는 단어 카드 화면입니다.
+    ai_pipeline:
+      - icon: fa fa-image
+        title: 이미지 입력
+        body: 사용자는 카메라 촬영 또는 갤러리 선택으로 학습할 이미지를 직접 제공합니다.
+      - icon: fa fa-crosshairs
+        title: 온디바이스 객체 인식
+        body: TensorFlow Lite EfficientDet-Lite0 모델을 앱 내부에서 실행해 최대 2개의 객체를 추론하고 confidence threshold를 적용했습니다.
+      - icon: fa fa-clone
+        title: 단어 카드 생성
+        body: 감지된 label을 기반으로 단어, 뜻, 예문, 사진을 묶은 학습 카드를 생성하고 날짜별 Log에 저장했습니다.
+      - icon: fa fa-comments
+        title: GPT 예문 보강
+        body: Cloud Function을 통해 GPT-3.5-turbo를 호출하고, 의미와 예문을 JSON 형태로 받아 앱 학습 데이터와 연결했습니다.
+      - icon: fa fa-microphone
+        title: 발음 학습과 복습
+        body: TTS로 발음을 듣고 STT로 사용자의 발음을 비교하며, Quiz 화면에서 4지선다 복습과 진행률을 확인합니다.
+    leadership_label: Role & Output
+    leadership_title: 담당 기능과 산출물
+    management_visual:
+      image: /assets/projects/chalkak/role-details.png
+      title: Role and responsibilities
+      caption: 발표자료에 정리된 팀원별 담당 범위입니다. 그중 객체 인식 모델 연동, TTS, 가속도 센서 기능을 맡아 구현했습니다.
+    leadership:
+      - title: 객체 인식 기능 연동
+        body: TensorFlow Lite 모델을 앱에 포함하고 ObjectDetectionHelper 중심으로 모델 초기화, 이미지 변환, 추론 결과 전달 책임을 분리했습니다.
+      - title: 학습 경험 보조 기능
+        body: TTS 발음 재생, STT 발음 비교, 흔들기 기반 Quick Snap을 구현해 사진 학습이 앱 안에서 자연스럽게 반복되도록 만들었습니다.
+      - title: 화면 흐름 연결
+        body: 객체 인식 결과가 학습 카드, Log, Quiz로 이어지도록 화면 간 데이터 전달과 저장 기준을 학습 흐름에 맞춰 정리했습니다.
+      - title: 발표 자료 기반 검증
+        body: 기능별 화면, 기술 흐름, 역할 범위를 발표자료에 정리해 구현 결과가 사용자 시나리오와 맞는지 확인했습니다.
+    deliverables:
+      - title: ObjectDetectionHelper
+        icon: fa fa-crosshairs
+      - title: Camera URI Flow
+        icon: fa fa-camera
+      - title: TTS Playback
+        icon: fa fa-volume-up
+      - title: STT Pronunciation Check
+        icon: fa fa-microphone
+      - title: Shake Quick Snap
+        icon: fa fa-bolt
+      - title: RoomDB Learning Log
+        icon: fa fa-database
+    troubleshooting_items:
+      - title: TensorFlow Lite 추론 결과 연결
+        logo: /assets/projects/chalkak/logos/tensorflow.svg
+        logo_alt: TensorFlow
+        problem: 모델 추론 결과를 단순 label로만 쓰면 학습 화면에서 객체 위치와 신뢰도를 함께 보여주기 어렵습니다.
+        solution: label, confidence score, bounding box를 함께 전달하도록 결과 구조를 정리하고, 화면에서 감지 영역과 학습 정보를 함께 표시했습니다.
+      - title: Android Camera URI 처리
+        logo: /assets/projects/chalkak/logos/android.svg
+        logo_alt: Android
+        problem: 카메라 촬영 파일과 갤러리 선택 파일의 URI 처리 방식이 달라 이미지 입력 흐름이 분기되었습니다.
+        solution: Activity Result API와 FileProvider 기반 content URI를 사용해 촬영·선택 이미지를 동일한 추론 플로우로 넘기도록 구성했습니다.
+      - title: Firebase 인증과 알림 토큰
+        logo: /assets/projects/chalkak/logos/firebase.svg
+        logo_alt: Firebase
+        problem: Google 로그인 세션과 FCM token을 사용자 단위로 저장하지 않으면 알림과 사용자 데이터 연결이 불안정해질 수 있습니다.
+        solution: Firebase Auth UID 기준으로 email, session, FCM token을 Firestore에 저장해 인증과 알림 흐름을 같은 사용자 기준으로 묶었습니다.
+      - title: GPT 예문 JSON 응답
+        logo: /assets/projects/chalkak/logos/openai.svg
+        logo_alt: OpenAI
+        problem: GPT 응답이 자유 문장으로 오면 앱에서 뜻과 예문을 안정적으로 카드에 매핑하기 어렵습니다.
+        solution: Cloud Function에서 strict JSON 형태로 의미, 영어 예문, 한국어 번역을 받도록 설계하고 RoomDB와 Firestore 저장 흐름에 연결했습니다.
     highlights:
-      - TensorFlow Lite 객체 인식 모델을 Android 앱에 임베딩하고 ObjectDetectionHelper로 추론 과정을 모듈화했습니다.
-      - Label, Confidence Score, Bounding Box 결과를 단어 학습 플로우와 연결했습니다.
-      - Room DB, Firestore, Firebase Functions, OpenAI API를 함께 활용해 로컬 우선 학습 데이터를 구성했습니다.
+      - TensorFlow Lite EfficientDet-Lite0 객체 인식 모델을 Android 앱에 임베딩했습니다.
+      - 카메라/갤러리 입력, bounding box 시각화, 단어 카드 생성, TTS/STT 학습 흐름을 연결했습니다.
+      - Room DB, Firestore, Firebase Functions, OpenAI API를 함께 활용해 로컬 우선 학습 데이터와 예문 생성 흐름을 구성했습니다.
+    tech_groups:
+      - title: Mobile App
+        icon: fa fa-mobile
+        items:
+          - name: Android
+            icon: devicon-android-plain
+          - name: Kotlin
+            icon: devicon-kotlin-plain
+            logo: /assets/projects/chalkak/logos/kotlin.svg
+          - name: XML Layout
+            icon: fa fa-code
+          - name: Fragment
+            icon: fa fa-window-restore
+          - name: Material CalendarView
+            icon: fa fa-calendar
+      - title: AI & Voice
+        icon: fa fa-magic
+        items:
+          - name: TensorFlow Lite
+            icon: devicon-tensorflow-original
+            logo: /assets/projects/chalkak/logos/tensorflow.svg
+          - name: EfficientDet-Lite0
+            icon: fa fa-crosshairs
+          - name: Object Detection
+            icon: fa fa-camera
+          - name: TextToSpeech
+            icon: fa fa-volume-up
+          - name: SpeechRecognizer
+            icon: fa fa-microphone
+      - title: Backend & Data
+        icon: fa fa-cloud
+        items:
+          - name: Firebase Auth
+            icon: fa fa-shield
+          - name: Firestore
+            icon: fa fa-cloud
+          - name: FCM
+            icon: fa fa-bell
+          - name: Cloud Functions
+            icon: fa fa-code
+          - name: Room DB
+            icon: fa fa-database
+          - name: GPT-3.5 Turbo
+            icon: fa fa-comments
+      - title: Tools
+        icon: fa fa-wrench
+        items:
+          - name: Android Studio
+            icon: fa fa-code
+          - name: Gradle
+            icon: devicon-gradle-plain
+          - name: Git
+            icon: devicon-git-plain
+          - name: GitHub
+            icon: devicon-github-original
+          - name: GitHub Issues
+            icon: fa fa-tasks
     stack:
       - Kotlin
       - Android
@@ -261,8 +423,11 @@ items:
       - Firebase
       - Room DB
       - OpenAI API
+    demo_video_title: 구현 흐름 데모
+    demo_video_embed: https://www.youtube.com/embed/PoXhhkdpS0o
+    demo_video_vertical: true
     link: https://github.com/chalkak-itm
-    presentation_url: https://canva.link/wxyy36liv3mgimr
+    presentation_url: https://www.canva.com/d/1mpYmghvk4f4sif
     presentation_pdf: /assets/projects/chalkak-app.pdf
 
   - title: OCT Retinal Disease Classification
