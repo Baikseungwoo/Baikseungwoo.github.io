@@ -21,15 +21,6 @@ items:
       - LangGraph 기반으로 입력 검증, NLP 구조화, 유사 사례 검색, Vision LLM 견적 생성, 결과 검증 단계를 구성했습니다.
       - AWS S3, CloudFront, Route 53, ECR, ECS, RDS를 활용해 프론트엔드·백엔드·AI 서비스를 분리 배포하는 구조를 잡았습니다.
       - Jira를 도입해 Epic, Sprint, Task 단위로 프로젝트를 관리하고 실무에 가까운 협업 흐름을 만들었습니다.
-    metrics:
-      - label: 최종 NLP 모델
-        value: KLUE-RoBERTa
-      - label: 평균 정확도
-        value: "86.4%"
-      - label: 실시간 추론
-        value: "0.014s"
-      - label: 발표자료
-        value: "48 pages"
     problem_visual:
       title: TukTak logo
       image: /assets/projects/tuktak/tuktak-logo.webp

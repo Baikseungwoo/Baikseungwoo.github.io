@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>CNN Mini Project Notebook Export</title>
+<style>
+@page { size: A4; margin: 16mm 14mm; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #1f211b; color: #d7d7d2; }
+body { font-family: "Segoe UI", "Malgun Gothic", Arial, sans-serif; font-size: 15px; line-height: 1.64; }
+.notebook { max-width: 1040px; margin: 0 auto; padding: 16px 0 42px; }
+.cell { page-break-inside: avoid; break-inside: avoid; margin: 0 0 18px; padding: 0 0 2px; }
+.markdown-cell { border-left: 4px solid rgba(192, 199, 184, .5); padding-left: 22px; }
+.code-cell { border-left: 4px solid rgba(67, 150, 190, .55); padding-left: 18px; }
+h1, h2, h3, h4, h5, h6 { color: #d4d4cf; font-weight: 500; line-height: 1.22; margin: 1.15em 0 .62em; page-break-after: avoid; }
+h1 { font-size: 38px; letter-spacing: -.02em; }
+h2 { font-size: 31px; border-bottom: 1px solid #8b8c85; padding-bottom: 20px; margin-top: 34px; }
+h3 { font-size: 24px; color: #d6d6d0; }
+h4 { font-size: 19px; color: #eeeeea; }
+p { margin: 0 0 11px; color: #d2d2cd; }
+ul, ol { margin: 8px 0 14px 24px; padding: 0; }
+li { margin: 4px 0; }
+strong { color: #f4f4ef; font-weight: 700; }
+em { color: #e6e6de; }
+a { color: #8ecbff; text-decoration: none; }
+hr { border: 0; border-top: 1px solid #86877f; margin: 26px 0; }
+code { font-family: Consolas, "Cascadia Code", monospace; color: #f2d58a; }
+pre { white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; margin: 8px 0 12px; padding: 14px 16px; border-radius: 6px; background: #151712; color: #d9e1df; border: 1px solid #343730; font-family: Consolas, "Cascadia Code", monospace; font-size: 11px; line-height: 1.46; }
+.cell-label { display: inline-flex; margin: 4px 0 8px; padding: 3px 8px; border-radius: 999px; background: #2d3b47; color: #b9dbff; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.outputs { margin: 10px 0 0; }
+.output-text { background: #111410; color: #c8d0cb; border-color: #30352d; }
+figure { margin: 14px 0 18px; page-break-inside: avoid; break-inside: avoid; }
+figure img, .output-figure img { display: block; max-width: 100%; height: auto; background: #fff; border-radius: 2px; }
+figcaption { margin-top: 6px; color: #aaaea7; font-size: 12px; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0 18px; font-size: 13px; page-break-inside: avoid; }
+th, td { border: 1px solid #565950; padding: 8px 9px; text-align: left; }
+th { background: #2d3029; color: #f0f0ea; }
+td { background: #23251f; }
+.markdown-cell:first-child h1 { margin-top: 0; font-size: 40px; }
+@media print {
+  html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .notebook { padding-top: 0; }
+}
+</style>
+</head>
+<body><main class="notebook"><section class="cell markdown-cell"><h1>CNN Mini Project (Rentina Damage Classification)</h1><p>21102042 Seungwoo Baik 백승우</p></section><section class="cell markdown-cell"><h2>📌 1. Topic Selection &amp; Problem Definition</h2><hr><h3>1.1 Topic Selection: Image Domain &amp; Task</h3><figure><img src="file:///C:/Users/user/Desktop/%EA%B0%9C%EC%9D%B8%EC%9E%90%EB%A3%8C/Baikseungwoo.github.io/assets/projects/oct-retinal-classification/notebook-cell-02-markdown-1.png" alt="notebook image"><figcaption>Notebook embedded image</figcaption></figure><p>This project focuses on the <strong>medical imaging domain</strong>, specifically <strong>Retinal OCT (Optical Coherence Tomography)</strong> images. OCT is a high-resolution imaging technique widely used in ophthalmology to observe the layered structure of the retina. Diseases such as <strong>CNV (Choroidal Neovascularization)</strong>, <strong>DME (Diabetic Macular Edema)</strong>, and <strong>Drusen</strong> display distinct morphological patterns in OCT scans, making them suitable targets for <strong>CNN-based image classification</strong>.</p><figure><img src="file:///C:/Users/user/Desktop/%EA%B0%9C%EC%9D%B8%EC%9E%90%EB%A3%8C/Baikseungwoo.github.io/assets/projects/oct-retinal-classification/notebook-cell-02-markdown-2.png" alt="notebook image"><figcaption>Notebook embedded image</figcaption></figure><p>The task for this project is <strong>multi-class image classification</strong>, where the model predicts which disease category an OCT image belongs to.</p><hr><h3>1.2 Problem Definition</h3><ul><li><strong>Input:</strong> A single retinal OCT image</li><li><strong>Output:</strong> One of four classes — <em>CNV, DME, Drusen, Normal</em></li><li><strong>Task Type:</strong> Multi-class image classification</li><li><strong>Objective:</strong> Train and evaluate a CNN model capable of learning disease-specific retinal features and accurately classifying OCT images.</li></ul><hr><h3>1.3 Why This Problem Is Interesting</h3><h4>● Clinical Significance</h4><p>OCT imaging is one of the most common diagnostic tools in ophthalmology. A robust automated classifier can support clinicians in early disease detection and reduce diagnostic workload.</p><h4>● Strong Suitability for CNN Models</h4><p>OCT images contain clear structural patterns (e.g., retinal layer thickness, distortions, fluid accumulation). These characteristics make them ideal for analyzing CNN feature-learning behavior.</p><h4>● Rich Experimental Opportunities</h4><ul><li>Data augmentation has a substantial effect on performance</li><li>Easy to compare <em>baseline vs. improved</em> CNN architectures</li><li>Confusion matrix reveals inter-class difficulty</li><li>Misclassified samples allow insightful failure-case analysis</li></ul><h4>● Reproducibility Through Public Datasets</h4><p>The <strong>OCT2017</strong> dataset (widely used in research) provides a large, labeled set of images, enabling reproducible experiments and reliable training.</p><hr></section><section class="cell markdown-cell"><h2>📌 2. Data Preparation</h2><hr><h3>2.1 Dataset Source</h3><p>In this project, I use the <strong>Labeled Optical Coherence Tomography (OCT) for Classification</strong> dataset (commonly called <strong>OCT2017</strong>), published by Daniel Kermany et al. on <strong>Mendeley Data</strong>:</p><ul><li>Dataset link: <a href="https://data.mendeley.com/datasets/rscbjbr9sj/1">https://data.mendeley.com/datasets/rscbjbr9sj/1</a></li><li>DOI: 10.17632/rscbjbr9sj.1</li><li>License: CC BY 4.0</li></ul><p>The dataset contains retinal OCT images from independent patients, categorized into four classes:</p><ul><li><strong>CNV</strong> – Choroidal Neovascularization</li><li><strong>DME</strong> – Diabetic Macular Edema</li><li><strong>DRUSEN</strong></li><li><strong>NORMAL</strong></li></ul><p>To get an intuitive understanding of the data, I first load the training set and visualize one example image from each class.</p></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>import matplotlib.pyplot as plt
+from torchvision import datasets, transforms
+from pathlib import Path
+import random
+
+# -----------------------------------------------------------------------------
+# 1. Define the path to the OCT2017 training data
+#    You MUST change this path to where you actually extracted the dataset
+#    on your Google Cloud VM.
+#    The expected folder structure is:
+#       OCT2017/
+#         train/
+#           CNV/
+#           DME/
+#           DRUSEN/
+#           NORMAL/
+#         test/
+#           CNV/
+#           ...
+# -----------------------------------------------------------------------------
+data_root = Path("OCT2017/train")
+
+# -----------------------------------------------------------------------------
+# 2. Define a simple transform for visualization
+#    - Convert image to grayscale (1 channel)
+#    - Resize to a fixed size (224 x 224)
+#    - Convert to PyTorch tensor (C x H x W)
+# -----------------------------------------------------------------------------
+simple_transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),  # values in [0, 1]
+])
+
+# -----------------------------------------------------------------------------
+# 3. Create an ImageFolder dataset.
+# -----------------------------------------------------------------------------
+raw_dataset = datasets.ImageFolder(root=data_root, transform=simple_transform)
+
+print("Number of images in train set:", len(raw_dataset))
+print("Classes:", raw_dataset.classes)
+
+# -----------------------------------------------------------------------------
+# 4. For each class (CNV, DME, DRUSEN, NORMAL),
+#    randomly select one image index and load that sample.
+# -----------------------------------------------------------------------------
+class_names = raw_dataset.classes
+num_classes = len(class_names)
+sample_images = []
+
+for class_idx in range(num_classes):
+    # collect all indices that belong to this class
+    indices = [i for i, (_, label) in enumerate(raw_dataset.samples) if label == class_idx]
+    # randomly choose one index from this class
+    chosen_index = random.choice(indices)
+
+    # load the image (already transformed to tensor)
+    img_tensor, label = raw_dataset[chosen_index]
+
+    # img_tensor has shape (1, H, W), so we remove the channel dimension for plotting
+    sample_images.append(img_tensor.squeeze(0))
+
+# -----------------------------------------------------------------------------
+# 5. Visualize the selected images in a single row.
+# -----------------------------------------------------------------------------
+plt.figure(figsize=(12, 3))
+
+for i, img in enumerate(sample_images):
+    plt.subplot(1, num_classes, i + 1)
+    plt.imshow(img, cmap="gray")
+    plt.title(class_names[i])
+    plt.axis("off")
+
+plt.suptitle("Example OCT Images from Each Class (OCT2017)", fontsize=14)
+plt.tight_layout()
+plt.show()</code></pre><div class="outputs"><pre class="output-text">Number of images in train set: 83484
+Classes: ['CNV', 'DME', 'DRUSEN', 'NORMAL']</pre><figure class="output-figure"><img src="file:///C:/Users/user/Desktop/%EA%B0%9C%EC%9D%B8%EC%9E%90%EB%A3%8C/Baikseungwoo.github.io/assets/projects/oct-retinal-classification/notebook-cell-04-output-2.png" alt="cell 4 output 2"></figure></div></section><section class="cell markdown-cell"><hr><h3>2.2 Train / Validation / Test Split</h3><p>The OCT2017 dataset already provides a predefined split into <code>train/</code> and <code>test/</code> folders. The training folder is relatively large, while the test folder contains a smaller set of images from independent patients.</p><p>To properly tune hyperparameters and monitor overfitting, I create an additional <strong>validation set</strong> by splitting a portion of the original training data.</p><ul><li>I first load the full <code>train/</code> set.</li><li>Then I randomly split it into <strong>training (80%)</strong> and <strong>validation (20%)</strong> subsets.</li><li>Combined with the separate <code>test/</code> folder, this results in an overall ratio that is close to</li></ul><p><strong>70% training, 15% validation, and 15% test</strong> for the entire dataset.</p><p>This strategy keeps the original test set intact (for unbiased final evaluation) while providing a dedicated validation set for model selection.</p></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>from torchvision import datasets, transforms
+from torch.utils.data import random_split
+import torch
+
+# -----------------------------------------------------------------------------
+# 1. Define base directory for OCT2017
+# -----------------------------------------------------------------------------
+oct_root = Path("OCT2017")
+train_dir = oct_root / "train"
+test_dir  = oct_root / "test"
+
+# -----------------------------------------------------------------------------
+# 2. Define a basic transform for now (will be replaced by full preprocessing)
+# -----------------------------------------------------------------------------
+basic_transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+])
+
+# -----------------------------------------------------------------------------
+# 3. Create ImageFolder datasets for train and test
+# -----------------------------------------------------------------------------
+train_full_dataset = datasets.ImageFolder(root=train_dir, transform=basic_transform)
+test_dataset       = datasets.ImageFolder(root=test_dir,  transform=basic_transform)
+
+print("Full train size:", len(train_full_dataset))
+print("Test size      :", len(test_dataset))
+print("Classes        :", train_full_dataset.classes)
+
+# -----------------------------------------------------------------------------
+# 4. Randomly split the original training set into
+#    - train_dataset (80%)
+#    - val_dataset   (20%)
+#    A fixed random seed is used for reproducibility.
+# -----------------------------------------------------------------------------
+train_val_len = len(train_full_dataset)
+val_len   = int(0.2 * train_val_len)
+train_len = train_val_len - val_len
+
+generator = torch.Generator().manual_seed(42)  # reproducible split
+
+train_dataset, val_dataset = random_split(
+    train_full_dataset,
+    lengths=[train_len, val_len],
+    generator=generator
+)
+
+print("Train subset size:", len(train_dataset))
+print("Val subset size  :", len(val_dataset))
+print("Test subset size :", len(test_dataset))</code></pre><div class="outputs"><pre class="output-text">Full train size: 83484
+Test size      : 1000
+Classes        : ['CNV', 'DME', 'DRUSEN', 'NORMAL']
+Train subset size: 66788
+Val subset size  : 16696
+Test subset size : 1000</pre></div></section><section class="cell markdown-cell"><h4>🔎 Dataset Split Summary</h4><p>The OCT2017 dataset is originally structured with a <strong>very large training set</strong> and a <strong>small fixed test set</strong>:</p><p>This small test set is <strong>intentional</strong>. The authors constructed the test set using images from <strong>independent patients</strong>, ensuring that the evaluation measures true generalization to unseen individuals. Because of this design, most OCT classification studies use the same setup.</p></section><section class="cell markdown-cell"><hr><h3>2.3 Preprocessing</h3><p>Before training the CNN, I apply a set of preprocessing steps to standardize the OCT images:</p><ul><li><strong>Resize to 224×224</strong></li></ul><p>Images in OCT2017 have varying resolutions. Resizing them to a fixed size ensures a consistent input shape and is compatible with many CNN architectures.</p><ul><li><strong>Grayscale conversion (1 channel)</strong></li></ul><p>OCT images are inherently grayscale. Using a single channel reduces computational cost while preserving all clinically relevant structural information.</p><ul><li><strong>Normalization</strong></li></ul><p>I normalize pixel intensities using a fixed mean and standard deviation (e.g., mean = 0.5, std = 0.5). This helps stabilize the training dynamics and allows the optimizer to converge more reliably.</p><p>I define separate transforms for training and evaluation (validation/test). In the next section, I will further extend the training transform with data augmentation.</p></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code># -----------------------------------------------------------------------------
+# 2.3-A Define preprocessing transforms
+# -----------------------------------------------------------------------------
+from torchvision import transforms
+
+# Evaluation transform (for validation and test sets)
+# - No augmentation, only resizing + normalization.
+eval_transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.5], std=[0.5]),
+])
+
+# Base training transform (before adding augmentation)
+# - For now, it is the same as eval_transform.
+train_base_transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.5], std=[0.5]),
+])
+
+# Assign transforms to the underlying datasets.
+# train_dataset and val_dataset are Subset wrappers of train_full_dataset,
+# so changing train_full_dataset.transform will affect both.
+train_full_dataset.transform = train_base_transform
+test_dataset.transform       = eval_transform</code></pre></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code># -----------------------------------------------------------------------------
+# 2.3-B Visualize preprocessing effect on a single image
+# -----------------------------------------------------------------------------
+from PIL import Image
+import matplotlib.pyplot as plt
+
+# 1. Pick one sample image path from the original training folder
+sample_path, sample_label = train_full_dataset.samples[0]  # (path, class_index)
+print("Sample path:", sample_path)
+print("Sample label index:", sample_label, "-&gt;", train_full_dataset.classes[sample_label])
+
+# 2. Load the original image with PIL (no transform)
+orig_img = Image.open(sample_path)
+
+# 3. Apply eval_transform and train_base_transform manually
+#    - eval_img: how the image looks after evaluation preprocessing
+#    - train_img: how the image looks after training preprocessing (same for now)
+eval_img_tensor  = eval_transform(orig_img)
+train_img_tensor = train_base_transform(orig_img)
+
+# Convert tensors (1, H, W) -&gt; (H, W) for plotting
+eval_img_np  = eval_img_tensor.squeeze(0).numpy()
+train_img_np = train_img_tensor.squeeze(0).numpy()
+
+# 4. Plot: original vs preprocessed (eval) vs preprocessed (train)
+plt.figure(figsize=(10, 3))
+
+plt.subplot(1, 3, 1)
+plt.imshow(orig_img, cmap="gray")
+plt.title("Original (raw)")
+plt.axis("off")
+
+plt.subplot(1, 3, 2)
+plt.imshow(eval_img_np, cmap="gray")
+plt.title("After eval_transform")
+plt.axis("off")
+
+plt.subplot(1, 3, 3)
+plt.imshow(train_img_np, cmap="gray")
+plt.title("After train_base_transform")
+plt.axis("off")
+
+plt.suptitle("Effect of Preprocessing (Resize + Grayscale + Normalize)", fontsize=13)
+plt.tight_layout()
+plt.show()</code></pre><div class="outputs"><pre class="output-text">Sample path: OCT2017/train/CNV/CNV-1016042-1.jpeg
+Sample label index: 0 -&gt; CNV</pre><figure class="output-figure"><img src="file:///C:/Users/user/Desktop/%EA%B0%9C%EC%9D%B8%EC%9E%90%EB%A3%8C/Baikseungwoo.github.io/assets/projects/oct-retinal-classification/notebook-cell-10-output-2.png" alt="cell 10 output 2"></figure></div></section><section class="cell markdown-cell"><h4>🔎 Interpretation of Preprocessing Results</h4><p>The three images (Original, After eval_transform, After train_base_transform) look almost the same. This is <strong>expected</strong> and indicates that preprocessing is working correctly.</p><ul><li>The OCT2017 dataset is already grayscale, so <code>Grayscale()</code> makes no visible change.</li><li>Normalization only affects pixel values internally for training, not the displayed image.</li><li>Resize changes resolution but does not noticeably change the retinal structure.</li></ul><p>Even if the images look similar, the preprocessing steps <strong>still significantly impact model training</strong> by standardizing input size and stabilizing learning.</p></section><section class="cell markdown-cell"><hr><h3>2.4 Data Augmentation</h3><p>To improve generalization and reduce overfitting, I apply <strong>data augmentation</strong> to the training set only. The following augmentations are used:</p><ul><li><strong>Random horizontal flip</strong></li></ul><p>Simulates slight left–right differences in OCT acquisition while preserving retinal anatomy.</p><ul><li><strong>Random rotation (±10–15 degrees)</strong></li></ul><p>Models small eye or head movements during scanning.</p><ul><li><strong>Random resized crop</strong></li></ul><p>Changes the exact region and scale slightly, encouraging the model to focus on robust global patterns rather than very specific pixel locations.</p><p>These transformations are realistic for OCT imaging and do not change the underlying disease label. The validation and test sets remain unaugmented so that they reflect the true evaluation distribution.</p></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code># -----------------------------------------------------------------------------
+# 2.4-A Define the final training transform with data augmentation
+# -----------------------------------------------------------------------------
+train_transform = transforms.Compose([
+    transforms.Grayscale(num_output_channels=1),
+    transforms.Resize((240, 240)),                          # slightly larger size
+    transforms.RandomResizedCrop(size=224, scale=(0.9, 1.0)),
+    transforms.RandomHorizontalFlip(p=0.5),
+    transforms.RandomRotation(degrees=12),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.5], std=[0.5]),
+])
+
+# Update the transform used by the training dataset (via train_full_dataset)
+train_full_dataset.transform = train_transform
+test_dataset.transform       = eval_transform  # keep evaluation transform for test</code></pre></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code># -----------------------------------------------------------------------------
+# 2.4-B Visualize multiple augmented versions of the same image
+# -----------------------------------------------------------------------------
+
+# 1. Use the same sample_path as before
+sample_path, sample_label = train_full_dataset.samples[0]
+orig_img = Image.open(sample_path)
+
+print("Visualizing augmentation for class:",
+      train_full_dataset.classes[sample_label])
+
+# 2. Generate several augmented versions of this image
+num_augs = 6  # how many augmented samples to show
+augmented_images = []
+
+for _ in range(num_augs):
+    aug_tensor = train_transform(orig_img)         # apply augmentation
+    aug_np = aug_tensor.squeeze(0).numpy()        # (1, H, W) -&gt; (H, W)
+    augmented_images.append(aug_np)
+
+# 3. Plot original + augmented images in a grid
+plt.figure(figsize=(12, 4))
+
+# show original on the left
+plt.subplot(1, num_augs + 1, 1)
+plt.imshow(orig_img, cmap="gray")
+plt.title("Original")
+plt.axis("off")
+
+# show augmented versions
+for i, img_np in enumerate(augmented_images):
+    plt.subplot(1, num_augs + 1, i + 2)
+    plt.imshow(img_np, cmap="gray")
+    plt.title(f"Aug {i+1}")
+    plt.axis("off")
+
+plt.suptitle("Random Data Augmentation Examples (train_transform)", fontsize=13)
+plt.tight_layout()
+plt.show()</code></pre><div class="outputs"><pre class="output-text">Visualizing augmentation for class: CNV</pre><figure class="output-figure"><img src="file:///C:/Users/user/Desktop/%EA%B0%9C%EC%9D%B8%EC%9E%90%EB%A3%8C/Baikseungwoo.github.io/assets/projects/oct-retinal-classification/notebook-cell-14-output-2.png" alt="cell 14 output 2"></figure></div></section><section class="cell markdown-cell"><hr><h3>2.5 DataLoader Construction</h3><p>Finally, I wrap each subset in a <code>DataLoader</code> to enable mini-batch training:</p><ul><li>The <strong>training loader</strong> shuffles the data every epoch to improve the effectiveness of stochastic</li></ul><p>gradient descent.</p><ul><li>The <strong>validation</strong> and <strong>test</strong> loaders do not shuffle, providing deterministic evaluation.</li></ul><p>I use a batch size of 32 as a starting point and may adjust it later depending on GPU memory and training stability.</p></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>from torch.utils.data import DataLoader
+
+# -----------------------------------------------------------------------------
+# 1. Define batch size (can be tuned later)
+# -----------------------------------------------------------------------------
+batch_size = 32
+
+# -----------------------------------------------------------------------------
+# 2. Create DataLoaders for train, validation, and test sets.
+# -----------------------------------------------------------------------------
+train_loader = DataLoader(
+    train_dataset,
+    batch_size=batch_size,
+    shuffle=True,     # shuffle only for training
+    num_workers=4,
+    pin_memory=True
+)
+
+val_loader = DataLoader(
+    val_dataset,
+    batch_size=batch_size,
+    shuffle=False,
+    num_workers=4,
+    pin_memory=True
+)
+
+test_loader = DataLoader(
+    test_dataset,
+    batch_size=batch_size,
+    shuffle=False,
+    num_workers=4,
+    pin_memory=True
+)
+
+# -----------------------------------------------------------------------------
+# 3. Sanity check: inspect one batch from the training loader.
+# -----------------------------------------------------------------------------
+images, labels = next(iter(train_loader))
+print("Train batch image shape :", images.shape)   # [B, C, H, W]
+print("Train batch labels shape:", labels.shape)
+print("Unique labels in this batch:", labels.unique())</code></pre><div class="outputs"><pre class="output-text">Train batch image shape : torch.Size([32, 1, 224, 224])
+Train batch labels shape: torch.Size([32])
+Unique labels in this batch: tensor([0, 1, 2, 3])</pre></div></section><section class="cell markdown-cell"><h4>✔ DataLoader Sanity Check Result</h4><p>The batch inspection confirms that the data pipeline is working correctly:</p><ul><li><strong>Images:</strong> <code>torch.Size([32, 1, 224, 224])</code></li></ul><p>→ Correct batch size, grayscale channel, and target resolution.</p><ul><li><strong>Labels:</strong> <code>torch.Size([32])</code></li></ul><p>→ All labels loaded properly for each image in the batch.</p><ul><li><strong>Classes present:</strong> <code>tensor([0, 1, 2, 3])</code></li></ul><p>→ All four OCT classes appear in the batch, indicating that the dataset split, transform, and DataLoader shuffling work as expected.</p><p>Overall, <strong>DataLoader, Transform, Split</strong> are functioning exactly as intended.</p><hr></section><section class="cell markdown-cell"><h2>📌 3. Model Design and Implementation</h2><hr><h3>3.1 Baseline CNN Architecture</h3><p>For the baseline model, I design a relatively shallow convolutional neural network (CNN) that serves as a reference point for later improvements.</p><p><strong>Input:</strong></p><ul><li>Single–channel retinal OCT image of size <code>1 × 224 × 224</code>.</li></ul><p><strong>Architecture overview:</strong></p><ol><li><strong>Conv Block 1</strong></li></ol><ul><li>Conv2d(1 → 16, kernel=3, padding=1)</li><li>BatchNorm2d(16)</li><li>ReLU</li><li>MaxPool2d(2) → spatial size: 224 → 112</li></ul><ol><li><strong>Conv Block 2</strong></li></ol><ul><li>Conv2d(16 → 32, kernel=3, padding=1)</li><li>BatchNorm2d(32)</li><li>ReLU</li><li>MaxPool2d(2) → 112 → 56</li></ul><ol><li><strong>Conv Block 3</strong></li></ol><ul><li>Conv2d(32 → 64, kernel=3, padding=1)</li><li>BatchNorm2d(64)</li><li>ReLU</li><li>MaxPool2d(2) → 56 → 28</li></ul><ol><li><strong>Conv Block 4</strong></li></ol><ul><li>Conv2d(64 → 128, kernel=3, padding=1)</li><li>BatchNorm2d(128)</li><li>ReLU</li><li>MaxPool2d(2) → 28 → 14</li></ul><ol><li><strong>Classifier</strong></li></ol><ul><li>Global average pooling (AdaptiveAvgPool2d(1)) → feature vector of size 128</li><li>Fully–connected layer: <code>128 → 4</code> (four OCT classes: CNV, DME, DRUSEN, NORMAL)</li></ul><figure><img src="file:///C:/Users/user/Desktop/%EA%B0%9C%EC%9D%B8%EC%9E%90%EB%A3%8C/Baikseungwoo.github.io/assets/projects/oct-retinal-classification/notebook-cell-18-markdown-1.png" alt="notebook image"><figcaption>Notebook embedded image</figcaption></figure><p><strong>Design justification:</strong></p><ul><li>The model is intentionally shallow and lightweight so that it can serve as a <strong>clean baseline</strong>.</li><li>Each convolutional block uses <strong>Batch Normalization</strong> and <strong>ReLU</strong>, which stabilizes training and speeds up convergence.</li><li>Progressive <strong>down-sampling</strong> (MaxPool) allows the network to capture increasingly abstract retinal structures while keeping the number of parameters manageable.</li><li>Global average pooling reduces the risk of overfitting by removing large fully–connected layers and directly aggregating spatial information into a compact feature vector.</li></ul></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class BaselineCNN(nn.Module):
+    """Simple 4-block CNN baseline for OCT classification."""
+    def __init__(self, num_classes: int = 4):
+        super().__init__()
+        self.features = nn.Sequential(
+            # Block 1: 1 → 16
+            nn.Conv2d(1, 16, kernel_size=3, padding=1),
+            nn.BatchNorm2d(16),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2),   # 224 → 112
+
+            # Block 2: 16 → 32
+            nn.Conv2d(16, 32, kernel_size=3, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2),   # 112 → 56
+
+            # Block 3: 32 → 64
+            nn.Conv2d(32, 64, kernel_size=3, padding=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2),   # 56 → 28
+
+            # Block 4: 64 → 128
+            nn.Conv2d(64, 128, kernel_size=3, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2),   # 28 → 14
+        )
+
+        # Global average pooling + linear classifier
+        self.gap = nn.AdaptiveAvgPool2d(1)  # → [B, 128, 1, 1]
+        self.fc = nn.Linear(128, num_classes)
+
+    def forward(self, x):
+        x = self.features(x)
+        x = self.gap(x)          # [B, 128, 1, 1]
+        x = torch.flatten(x, 1)  # [B, 128]
+        x = self.fc(x)           # [B, num_classes]
+        return x</code></pre></section><section class="cell markdown-cell"><hr><h3>3.2 Improved Model: SE-ResBlock OCTNet</h3><p>To improve over the baseline CNN, I design a deeper architecture that combines:</p><ul><li><strong>Residual connections</strong> (from ResNet) to stabilize training of deeper networks.</li><li><strong>Squeeze-and-Excitation (SE) channel attention</strong> to emphasize disease–relevant feature channels in OCT images.</li></ul><p>The overall architecture is:</p><ol><li><strong>Stem Conv Block</strong></li></ol><ul><li>Conv2d(1 → 32, kernel=3, stride=2, padding=1)</li><li>BatchNorm2d(32)</li><li>ReLU</li><li>MaxPool2d(2) → 224 → 112 → 56</li></ul><ol><li><strong>SE-Residual Block 1</strong></li></ol><ul><li>Input channels: 32, output channels: 64, stride=1</li><li>Residual block: two <code>3×3</code> convolutions with BatchNorm and ReLU</li><li>Skip connection adds the input to the block output</li><li>SE module applies channel–wise attention on the 64 feature maps</li></ul><ol><li><strong>SE-Residual Block 2</strong></li></ol><ul><li>Input channels: 64, output channels: 128, stride=2</li><li>Downsamples spatial size (56 → 28) while increasing channels</li><li>Again uses residual connection + SE channel attention</li></ul><ol><li><strong>Classifier</strong></li></ol><ul><li>Global average pooling (AdaptiveAvgPool2d(1)) → feature vector of size 128</li><li>Fully–connected layer: <code>128 → 4</code></li></ul><h4>BaseLine &lt;-- Residual + SE Attention</h4><figure><img src="file:///C:/Users/user/Desktop/%EA%B0%9C%EC%9D%B8%EC%9E%90%EB%A3%8C/Baikseungwoo.github.io/assets/projects/oct-retinal-classification/notebook-cell-20-markdown-1.png" alt="notebook image"><figcaption>Notebook embedded image</figcaption></figure><p>​</p><p><strong>Design justification (improvements over baseline):</strong></p><ul><li><strong>Residual connections</strong> help gradients flow through deeper layers, reducing the risk of vanishing gradients and enabling the model to learn more complex retinal patterns.</li><li>The <strong>SE module</strong> explicitly learns which channels are important for each OCT image by reweighting feature maps; this is suitable for medical images where subtle structural differences are critical.</li><li>Compared to the baseline CNN, this model:</li><li>Has a deeper effective depth,</li><li>Uses skip connections for more stable optimization,</li><li>Incorporates attention to focus on disease–relevant information.</li></ul></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>class SEBlock(nn.Module):
+    """Squeeze-and-Excitation channel attention block."""
+    def __init__(self, channels: int, reduction: int = 16):
+        super().__init__()
+        self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        self.fc = nn.Sequential(
+            nn.Linear(channels, channels // reduction, bias=False),
+            nn.ReLU(inplace=True),
+            nn.Linear(channels // reduction, channels, bias=False),
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        b, c, _, _ = x.size()
+        y = self.avg_pool(x).view(b, c)      # [B, C]
+        y = self.fc(y).view(b, c, 1, 1)      # [B, C, 1, 1]
+        return x * y                         # channel-wise reweighting</code></pre></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>class SEResidualBlock(nn.Module):
+    """Residual block with SE channel attention."""
+    def __init__(self, in_channels: int, out_channels: int, stride: int = 1):
+        super().__init__()
+
+        self.conv1 = nn.Conv2d(in_channels, out_channels,
+                               kernel_size=3, stride=stride, padding=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(out_channels)
+        self.conv2 = nn.Conv2d(out_channels, out_channels,
+                               kernel_size=3, stride=1, padding=1, bias=False)
+        self.bn2 = nn.BatchNorm2d(out_channels)
+
+        self.se = SEBlock(out_channels, reduction=16)
+
+        # If shape changes (channels or stride), use a 1×1 conv for the shortcut
+        if stride != 1 or in_channels != out_channels:
+            self.downsample = nn.Sequential(
+                nn.Conv2d(in_channels, out_channels,
+                          kernel_size=1, stride=stride, bias=False),
+                nn.BatchNorm2d(out_channels)
+            )
+        else:
+            self.downsample = None
+
+        self.relu = nn.ReLU(inplace=True)
+
+    def forward(self, x):
+        identity = x
+
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.relu(out)
+
+        out = self.conv2(out)
+        out = self.bn2(out)
+
+        out = self.se(out)  # apply channel attention
+
+        if self.downsample is not None:
+            identity = self.downsample(identity)
+
+        out += identity
+        out = self.relu(out)
+        return out</code></pre></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>class SEResBlockOCTNet(nn.Module):
+    """Improved OCT classifier with Residual + SE blocks."""
+    def __init__(self, num_classes: int = 4):
+        super().__init__()
+
+        # Stem
+        self.stem = nn.Sequential(
+            nn.Conv2d(1, 32, kernel_size=3, stride=2, padding=1, bias=False),
+            nn.BatchNorm2d(32),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(2),   # 224 → 112 → 56
+        )
+
+        # SE-Residual blocks
+        self.layer1 = SEResidualBlock(32, 64, stride=1)   # 56 → 56
+        self.layer2 = SEResidualBlock(64, 128, stride=2)  # 56 → 28
+
+        # Classifier
+        self.gap = nn.AdaptiveAvgPool2d(1)  # → [B, 128, 1, 1]
+        self.fc = nn.Linear(128, num_classes)
+
+    def forward(self, x):
+        x = self.stem(x)
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = self.gap(x)
+        x = torch.flatten(x, 1)
+        x = self.fc(x)
+        return x</code></pre></section><section class="cell markdown-cell"><hr><h3>3.3 Loss Function and Training Hyperparameters</h3><p>For both the baseline CNN and the improved SE-ResBlock OCTNet, I use <strong>Cross-Entropy Loss</strong>, which is the standard choice for multi–class classification.</p><p>I train the models with the following key hyperparameters:</p><ul><li><strong>Optimizer:</strong> Adam</li><li><strong>Loss function:</strong> CrossEntropyLoss</li><li><strong>Batch size:</strong> 32</li><li><strong>Initial learning rate:</strong> 1e-4</li><li><strong>Weight decay (L2 regularization):</strong> 1e-4</li><li><strong>Number of epochs:</strong> 20</li><li><strong>Device:</strong> CUDA (if available), otherwise CPU</li></ul><p>These values are recorded in a configuration dictionary and printed at the start of training for reproducibility.</p></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("Using device:", device)
+
+config = {
+    "optimizer": "Adam",
+    "loss_fn": "CrossEntropyLoss",
+    "batch_size": 32,
+    "learning_rate": 1e-4,
+    "weight_decay": 1e-4,
+    "num_epochs": 20,
+}
+
+print("Training hyperparameters:")
+for k, v in config.items():
+    print(f"  {k}: {v}")
+
+# Example: create model and move to device
+baseline_model = BaselineCNN(num_classes=4).to(device)
+improved_model = SEResBlockOCTNet(num_classes=4).to(device)
+
+criterion = nn.CrossEntropyLoss()
+import torch.optim as optim
+baseline_optimizer = optim.Adam(baseline_model.parameters(),
+                                lr=config["learning_rate"],
+                                weight_decay=config["weight_decay"])</code></pre><div class="outputs"><pre class="output-text">Using device: cuda
+Training hyperparameters:
+  optimizer: Adam
+  loss_fn: CrossEntropyLoss
+  batch_size: 32
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  num_epochs: 20</pre></div></section><section class="cell markdown-cell"><h4>✔ Training Setup Completed</h4><p>All training components have been successfully initialized:</p><ul><li>Device configuration (CPU/GPU) confirmed</li><li>Loss function (CrossEntropyLoss) defined</li><li>Optimizer (Adam) created with recorded hyperparameters</li><li>Both baseline and improved models loaded onto the selected device</li></ul><p>The models are now fully prepared for the training stage.</p><hr></section><section class="cell markdown-cell"><h2>📌 4. Evaluation and Analysis</h2><hr><h3>4.1 Training Utilities</h3><p>To evaluate both the baseline CNN and the improved SE-ResBlock OCTNet in a fair way, I first define reusable training and evaluation utilities.</p><p>These functions:</p><ul><li>run one training epoch or one evaluation pass,</li><li><strong>record and return</strong> loss and accuracy,</li><li>and <strong>print key training statistics (epoch, loss, accuracy, learning rate)</strong></li></ul><p>so that the training process and hyperparameters are explicitly logged.</p></section><section class="cell markdown-cell"><h4>train_one_epoch()</h4><p>This function performs one full training pass over the training dataset. For each batch, it:</p><ul><li>moves data to the selected device (CPU/GPU),</li><li>performs forward and backward propagation,</li><li>updates model parameters,</li><li>and accumulates loss and accuracy.</li></ul><p>It returns the <strong>average training loss</strong> and <strong>training accuracy</strong> for the epoch.</p></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>def train_one_epoch(model, dataloader, optimizer, criterion, device):
+    model.train()
+    running_loss = 0.0
+    running_correct = 0
+    total = 0
+
+    for images, labels in dataloader:
+        images = images.to(device)
+        labels = labels.to(device)
+
+        optimizer.zero_grad()
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+
+        _, preds = torch.max(outputs, 1)
+        running_loss += loss.item() * labels.size(0)
+        running_correct += (preds == labels).sum().item()
+        total += labels.size(0)
+
+    return running_loss / total, running_correct / total</code></pre></section><section class="cell markdown-cell"><h4>evaluate()</h4><p>This function runs the model in evaluation mode (<code>model.eval()</code>) and computes loss and accuracy <strong>without updating weights</strong>.</p><p>It is used for:</p><ul><li>validation during training,</li><li>and final test evaluation.</li></ul><p>It returns the average <strong>validation loss</strong> and <strong>validation accuracy</strong>.</p></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>@torch.no_grad()
+def evaluate(model, dataloader, criterion, device):
+    model.eval()
+    running_loss = 0.0
+    running_correct = 0
+    total = 0
+
+    for images, labels in dataloader:
+        images = images.to(device)
+        labels = labels.to(device)
+
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+
+        _, preds = torch.max(outputs, 1)
+        running_loss += loss.item() * labels.size(0)
+        running_correct += (preds == labels).sum().item()
+        total += labels.size(0)
+
+    return running_loss / total, running_correct / total</code></pre></section><section class="cell markdown-cell"><h4>train_model()</h4><p>This function runs the full training loop for a given number of epochs. It:</p><ul><li>prints key hyperparameters at the beginning,</li><li>calls <code>train_one_epoch()</code> and <code>evaluate()</code> each epoch,</li><li>prints learning statistics (loss, accuracy, learning rate) every epoch,</li><li>and stores history for learning-curve visualizations.</li></ul><p>This satisfies the assignment requirement: <strong>"Train your models and record/print key hyperparameters and metrics."</strong></p></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>import time
+
+def train_model(model, train_loader, val_loader, optimizer, criterion,
+                device, num_epochs, config=None):
+
+    # Print hyperparameters once at the beginning (for reproducibility)
+    if config is not None:
+        print("=== Training Configuration ===")
+        for k, v in config.items():
+            print(f"{k}: {v}")
+        print("==============================")
+
+    # Containers to store metrics for each epoch
+    history = {
+        "train_loss": [],
+        "train_acc": [],
+        "val_loss": [],
+        "val_acc": [],
+        "epoch_time": [],  # NEW: time per epoch (seconds)
+    }
+
+    # Measure total training time
+    total_start = time.time()
+
+    for epoch in range(1, num_epochs + 1):
+        epoch_start = time.time()  # start timer for this epoch
+
+        # --- Training phase ---
+        train_loss, train_acc = train_one_epoch(
+            model, train_loader, optimizer, criterion, device
+        )
+
+        # --- Validation phase ---
+        val_loss, val_acc = evaluate(
+            model, val_loader, criterion, device
+        )
+
+        # Compute elapsed time for this epoch
+        epoch_seconds = time.time() - epoch_start
+
+        # Save metrics to history for later visualization/analysis
+        history["train_loss"].append(train_loss)
+        history["train_acc"].append(train_acc)
+        history["val_loss"].append(val_loss)
+        history["val_acc"].append(val_acc)
+        history["epoch_time"].append(epoch_seconds)
+
+        # Read the current learning rate from the optimizer
+        current_lr = optimizer.param_groups[0]["lr"]
+
+        # Print one summary line per epoch (including time)
+        print(
+            f"[Epoch {epoch:02d}] "
+            f"lr={current_lr:.6f} | "
+            f"Train Loss={train_loss:.4f}, Acc={train_acc:.4f} | "
+            f"Val Loss={val_loss:.4f}, Acc={val_acc:.4f} | "
+            f"Time={epoch_seconds:.2f}s"
+        )
+
+    total_seconds = time.time() - total_start
+    print(f"Total training time: {total_seconds:.2f} seconds")
+
+    return history</code></pre></section><section class="cell markdown-cell"><hr><h3>4.2 Baseline CNN Training</h3><p>In this step, I train the <strong>Baseline CNN</strong> model using the training set and monitor its performance on the validation set.</p><ul><li>The model is optimized with <strong>Adam</strong> and <strong>CrossEntropyLoss</strong>.</li><li>The key hyperparameters (learning rate, batch size, weight decay, epochs)</li></ul><p>are already defined in the <code>config</code> dictionary.</p><ul><li>During training, for each epoch I <strong>record and print</strong>:</li><li>learning rate</li><li>training loss and accuracy</li><li>validation loss and accuracy</li></ul><p>This provides a quantitative baseline for later comparison with the improved SE-ResBlock OCTNet model.</p></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>import torch.optim as optim
+
+
+print("&gt;&gt;&gt; Start training: Baseline CNN")
+baseline_history = train_model(
+    model=baseline_model,
+    train_loader=train_loader,
+    val_loader=val_loader,
+    optimizer=baseline_optimizer,
+    criterion=criterion,
+    device=device,
+    num_epochs=config["num_epochs"],
+    config=config,
+)
+print("&gt;&gt;&gt; Finished training: Baseline CNN")</code></pre><div class="outputs"><pre class="output-text">&gt;&gt;&gt; Start training: Baseline CNN
+=== Training Configuration ===
+optimizer: Adam
+loss_fn: CrossEntropyLoss
+batch_size: 32
+learning_rate: 0.0001
+weight_decay: 0.0001
+num_epochs: 20
+==============================
+[Epoch 01] lr=0.000100 | Train Loss=0.8192, Acc=0.6969 | Val Loss=0.6790, Acc=0.7535 | Time=184.34s
+[Epoch 02] lr=0.000100 | Train Loss=0.6245, Acc=0.7749 | Val Loss=0.5803, Acc=0.7807 | Time=184.01s
+[Epoch 03] lr=0.000100 | Train Loss=0.5304, Acc=0.8107 | Val Loss=0.6129, Acc=0.7726 | Time=183.45s
+[Epoch 04] lr=0.000100 | Train Loss=0.4667, Acc=0.8344 | Val Loss=0.4559, Acc=0.8406 | Time=183.15s
+[Epoch 05] lr=0.000100 | Train Loss=0.4295, Acc=0.8485 | Val Loss=0.4405, Acc=0.8427 | Time=183.04s
+[Epoch 06] lr=0.000100 | Train Loss=0.4028, Acc=0.8578 | Val Loss=0.5090, Acc=0.8120 | Time=183.24s
+[Epoch 07] lr=0.000100 | Train Loss=0.3774, Acc=0.8678 | Val Loss=0.4214, Acc=0.8424 | Time=183.57s
+[Epoch 08] lr=0.000100 | Train Loss=0.3621, Acc=0.8725 | Val Loss=0.3313, Acc=0.8862 | Time=184.76s
+[Epoch 09] lr=0.000100 | Train Loss=0.3499, Acc=0.8765 | Val Loss=0.6358, Acc=0.7528 | Time=184.03s
+[Epoch 10] lr=0.000100 | Train Loss=0.3328, Acc=0.8830 | Val Loss=0.3450, Acc=0.8775 | Time=184.34s
+[Epoch 11] lr=0.000100 | Train Loss=0.3231, Acc=0.8872 | Val Loss=0.3254, Acc=0.8840 | Time=184.53s
+[Epoch 12] lr=0.000100 | Train Loss=0.3125, Acc=0.8911 | Val Loss=0.3231, Acc=0.8846 | Time=183.74s
+[Epoch 13] lr=0.000100 | Train Loss=0.3039, Acc=0.8936 | Val Loss=0.3016, Acc=0.8948 | Time=183.80s
+[Epoch 14] lr=0.000100 | Train Loss=0.3000, Acc=0.8944 | Val Loss=0.3182, Acc=0.8883 | Time=183.07s
+[Epoch 15] lr=0.000100 | Train Loss=0.2911, Acc=0.8982 | Val Loss=0.2863, Acc=0.8984 | Time=183.35s
+[Epoch 16] lr=0.000100 | Train Loss=0.2836, Acc=0.9012 | Val Loss=0.3803, Acc=0.8737 | Time=184.12s
+[Epoch 17] lr=0.000100 | Train Loss=0.2784, Acc=0.9023 | Val Loss=0.3446, Acc=0.8721 | Time=183.28s
+[Epoch 18] lr=0.000100 | Train Loss=0.2713, Acc=0.9056 | Val Loss=0.2640, Acc=0.9097 | Time=187.99s
+[Epoch 19] lr=0.000100 | Train Loss=0.2685, Acc=0.9070 | Val Loss=0.2598, Acc=0.9105 | Time=189.76s
+[Epoch 20] lr=0.000100 | Train Loss=0.2633, Acc=0.9083 | Val Loss=0.2591, Acc=0.9135 | Time=187.31s
+Total training time: 3688.88 seconds
+&gt;&gt;&gt; Finished training: Baseline CNN</pre></div></section><section class="cell markdown-cell"><h4>✔ Baseline CNN Training Interpretation</h4><p>The baseline CNN shows a stable learning pattern across 20 epochs:</p><ul><li><strong>Training loss continuously decreases</strong> from 0.819 → 0.263</li></ul><p>and <strong>training accuracy increases</strong> from 0.697 → 0.908, indicating that the model learns meaningful retinal features.</p><ul><li><strong>Validation accuracy improves steadily</strong> and eventually reaches <strong>0.9135</strong>,</li></ul><p>showing strong generalization performance for a simple CNN architecture.</p><ul><li>Some fluctuations in validation accuracy (e.g., Epoch 9, 16–17)</li></ul><p>suggest mild sensitivity to certain batches, but the model quickly recovers.</p><ul><li><strong>No severe overfitting</strong> is observed:</li></ul><p>validation accuracy remains close to training accuracy, especially in the later epochs (Epoch 18–20).</p><ul><li><strong>Epoch time is consistent (~183–188s per epoch)</strong>,</li></ul><p>confirming stable GPU/CPU utilization during training.</p><p>Overall, the baseline CNN provides a solid reference point, reaching around <strong>91% validation accuracy</strong>, which will be used for comparison with the improved SE-ResBlock OCTNet in the next section.</p><hr></section><section class="cell markdown-cell"><h3>4.3 Improved Model Training (SE-ResBlock OCTNet)</h3><p>Next, I train the <strong>improved SE-ResBlock OCTNet</strong> model using the same training and validation splits as the baseline CNN.</p><p>The key differences compared to the baseline are:</p><ul><li><strong>Residual connections</strong> to stabilize optimization in a deeper network.</li><li><strong>Squeeze-and-Excitation (SE) channel attention</strong> to highlight</li></ul><p>disease-relevant feature channels in OCT images.</p><p>I use the <strong>same loss function, optimizer type, and hyperparameters</strong> as in the baseline experiment so that the comparison focuses on the effect of the architectural changes rather than different training settings. During training, I again record and print:</p><ul><li>learning rate</li><li>training loss and accuracy</li><li>validation loss and accuracy</li><li>time per epoch</li></ul></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>import torch.optim as optim
+
+# Create a fresh instance of the improved model
+improved_model = SEResBlockOCTNet(num_classes=4).to(device)
+
+# Create an optimizer for the improved model
+improved_optimizer = optim.Adam(
+    improved_model.parameters(),
+    lr=config["learning_rate"],
+    weight_decay=config["weight_decay"]
+)
+
+print("&gt;&gt;&gt; Start training: Improved SE-ResBlock OCTNet")
+
+# Train the improved model and record the training history
+improved_history = train_model(
+    model=improved_model,
+    train_loader=train_loader,
+    val_loader=val_loader,
+    optimizer=improved_optimizer,
+    criterion=criterion,
+    device=device,
+    num_epochs=config["num_epochs"],
+    config=config  # log the same hyperparameters
+)
+
+print("&gt;&gt;&gt; Finished training: Improved SE-ResBlock OCTNet")</code></pre><div class="outputs"><pre class="output-text">&gt;&gt;&gt; Start training: Improved SE-ResBlock OCTNet
+=== Training Configuration ===
+optimizer: Adam
+loss_fn: CrossEntropyLoss
+batch_size: 32
+learning_rate: 0.0001
+weight_decay: 0.0001
+num_epochs: 20
+==============================
+[Epoch 01] lr=0.000100 | Train Loss=0.7652, Acc=0.7192 | Val Loss=0.6118, Acc=0.7885 | Time=188.98s
+[Epoch 02] lr=0.000100 | Train Loss=0.4997, Acc=0.8225 | Val Loss=0.5765, Acc=0.7859 | Time=189.61s
+[Epoch 03] lr=0.000100 | Train Loss=0.3894, Acc=0.8624 | Val Loss=0.3831, Acc=0.8610 | Time=188.00s
+[Epoch 04] lr=0.000100 | Train Loss=0.3455, Acc=0.8781 | Val Loss=0.3120, Acc=0.8900 | Time=188.15s
+[Epoch 05] lr=0.000100 | Train Loss=0.3106, Acc=0.8915 | Val Loss=0.3267, Acc=0.8908 | Time=188.45s
+[Epoch 06] lr=0.000100 | Train Loss=0.2925, Acc=0.8973 | Val Loss=0.2688, Acc=0.9102 | Time=188.53s
+[Epoch 07] lr=0.000100 | Train Loss=0.2703, Acc=0.9049 | Val Loss=0.3709, Acc=0.8646 | Time=188.68s
+[Epoch 08] lr=0.000100 | Train Loss=0.2590, Acc=0.9095 | Val Loss=0.2647, Acc=0.9042 | Time=188.47s
+[Epoch 09] lr=0.000100 | Train Loss=0.2468, Acc=0.9144 | Val Loss=0.3249, Acc=0.8917 | Time=188.66s
+[Epoch 10] lr=0.000100 | Train Loss=0.2348, Acc=0.9176 | Val Loss=0.2160, Acc=0.9284 | Time=187.69s
+[Epoch 11] lr=0.000100 | Train Loss=0.2285, Acc=0.9201 | Val Loss=0.2397, Acc=0.9205 | Time=188.13s
+[Epoch 12] lr=0.000100 | Train Loss=0.2199, Acc=0.9234 | Val Loss=0.2315, Acc=0.9206 | Time=186.54s
+[Epoch 13] lr=0.000100 | Train Loss=0.2133, Acc=0.9255 | Val Loss=0.2603, Acc=0.9098 | Time=184.88s
+[Epoch 14] lr=0.000100 | Train Loss=0.2050, Acc=0.9289 | Val Loss=0.2432, Acc=0.9167 | Time=189.11s
+[Epoch 15] lr=0.000100 | Train Loss=0.2029, Acc=0.9295 | Val Loss=0.2005, Acc=0.9338 | Time=188.41s
+[Epoch 16] lr=0.000100 | Train Loss=0.1948, Acc=0.9325 | Val Loss=0.2418, Acc=0.9208 | Time=188.22s
+[Epoch 17] lr=0.000100 | Train Loss=0.1894, Acc=0.9340 | Val Loss=0.1855, Acc=0.9377 | Time=185.53s
+[Epoch 18] lr=0.000100 | Train Loss=0.1855, Acc=0.9355 | Val Loss=0.2524, Acc=0.9181 | Time=184.66s
+[Epoch 19] lr=0.000100 | Train Loss=0.1833, Acc=0.9368 | Val Loss=0.2285, Acc=0.9220 | Time=184.67s
+[Epoch 20] lr=0.000100 | Train Loss=0.1807, Acc=0.9366 | Val Loss=0.1763, Acc=0.9408 | Time=183.71s
+Total training time: 3749.08 seconds
+&gt;&gt;&gt; Finished training: Improved SE-ResBlock OCTNet</pre></div></section><section class="cell markdown-cell"><h4>✔ Improved SE-ResBlock OCTNet Training Interpretation</h4><p>The improved model shows consistently stronger performance than the baseline:</p><ul><li><strong>Training loss decreases steadily</strong> from 0.765 → 0.180</li></ul><p>and <strong>training accuracy increases</strong> from 0.719 → 0.936, indicating stable optimization with the help of residual connections.</p><ul><li><strong>Validation accuracy improves quickly</strong>, reaching <strong>0.94</strong>,</li></ul><p>which is higher than the baseline's final accuracy (0.9135).</p><ul><li>The model periodically shows small validation fluctuations</li></ul><p>(e.g., Epoch 7, 9, 13), but overall maintains strong generalization and consistently recovers.</p><ul><li>The <strong>best validation accuracy (0.9408)</strong> appears at Epoch 20,</li></ul><p>demonstrating that the SE attention mechanism effectively enhances feature discrimination in OCT images.</p><ul><li><strong>Training time per epoch (~187–189s)</strong> is nearly identical to the baseline,</li></ul><p>showing that the architectural improvements do not significantly increase computational cost.</p><p>Overall, the SE-ResBlock OCTNet provides a clear improvement over the baseline CNN, achieving <strong>higher validation accuracy with similar training time</strong>, validating the effectiveness of residual connections and SE channel attention.</p><hr></section><section class="cell markdown-cell"><h3>4.4 Learning Curves Visualization</h3><p>To compare the learning behavior of the baseline CNN and the improved SE-ResBlock OCTNet, I visualize the <strong>training and validation loss/accuracy</strong> across epochs.</p><p>The plots help to:</p><ul><li>check whether each model is underfitting or overfitting,</li><li>see how fast each model converges,</li><li>and compare the generalization performance (validation curves) between</li></ul><p>the baseline and the improved architecture.</p></section><section class="cell markdown-cell"><h4>Lose Curves &amp; Accuracy Curves</h4></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>import matplotlib.pyplot as plt
+
+# Number of epochs (should be the same for both models)
+epochs = range(1, len(baseline_history["train_loss"]) + 1)
+
+# ----- Plot Loss Curves -----
+plt.figure(figsize=(8, 5))
+
+# Baseline loss
+plt.plot(epochs, baseline_history["train_loss"], label="Baseline Train Loss")
+plt.plot(epochs, baseline_history["val_loss"], label="Baseline Val Loss")
+
+# Improved loss
+plt.plot(epochs, improved_history["train_loss"], linestyle="--", label="Improved Train Loss")
+plt.plot(epochs, improved_history["val_loss"], linestyle="--", label="Improved Val Loss")
+
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+plt.title("Training and Validation Loss")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()
+
+# ----- Plot Accuracy Curves -----
+plt.figure(figsize=(8, 5))
+
+# Baseline accuracy
+plt.plot(epochs, baseline_history["train_acc"], label="Baseline Train Acc")
+plt.plot(epochs, baseline_history["val_acc"], label="Baseline Val Acc")
+
+# Improved accuracy
+plt.plot(epochs, improved_history["train_acc"], linestyle="--", label="Improved Train Acc")
+plt.plot(epochs, improved_history["val_acc"], linestyle="--", label="Improved Val Acc")
+
+plt.xlabel("Epoch")
+plt.ylabel("Accuracy")
+plt.title("Training and Validation Accuracy")
+plt.legend()
+plt.grid(True)
+plt.tight_layout()
+plt.show()</code></pre><div class="outputs"><figure class="output-figure"><img src="file:///C:/Users/user/Desktop/%EA%B0%9C%EC%9D%B8%EC%9E%90%EB%A3%8C/Baikseungwoo.github.io/assets/projects/oct-retinal-classification/notebook-cell-42-output-1.png" alt="cell 42 output 1"></figure><figure class="output-figure"><img src="file:///C:/Users/user/Desktop/%EA%B0%9C%EC%9D%B8%EC%9E%90%EB%A3%8C/Baikseungwoo.github.io/assets/projects/oct-retinal-classification/notebook-cell-42-output-2.png" alt="cell 42 output 2"></figure></div></section><section class="cell markdown-cell"><h4>✔ Learning Curves Interpretation</h4><p>From the plotted learning curves, several important observations can be made:</p><h5>Loss Curves</h5><ul><li>Both models show <strong>steady decreases in training loss</strong>, indicating successful optimization.</li><li>The <strong>improved model consistently maintains lower validation loss</strong> than the baseline,</li></ul><p>especially after Epoch 4. This suggests better generalization and stronger feature extraction.</p><ul><li>The baseline model's validation loss fluctuates significantly in the early epochs</li></ul><p>(e.g., around Epoch 3, 6, 9), while the improved model remains more stable.</p><h5>Accuracy Curves</h5><ul><li>The <strong>improved model reaches higher validation accuracy</strong> throughout training.</li></ul><p>It surpasses <strong>0.90 accuracy early (Epoch 6)</strong> and peaks around <strong>0.94</strong>, while the baseline gradually rises and stabilizes around <strong>0.91</strong>.</p><ul><li>The improved model's training and validation accuracy curves stay closer together,</li></ul><p>indicating <strong>less overfitting</strong> compared to the baseline.</p><ul><li>The baseline model shows occasional drops in validation accuracy</li></ul><p>(e.g., Epoch 7, 9, 16), meaning it is more sensitive to difficult batches.</p><h5>Overall Comparison</h5><ul><li>The improved SE-ResBlock OCTNet shows:</li><li><strong>lower training and validation loss</strong>,</li><li><strong>higher training and validation accuracy</strong>,</li><li><strong>more stable validation trends</strong>,</li><li><strong>better convergence behavior</strong>.</li><li>Importantly, these improvements come <strong>without increasing training time</strong>,</li></ul><p>since both models show ~183–188 seconds per epoch.</p><p><strong>Conclusion:</strong> The learning curves clearly demonstrate that incorporating residual connections and SE channel attention significantly improves model performance on retinal OCT classification.</p><hr></section><section class="cell markdown-cell"><h3>4.5 Final Test Evaluation</h3><p>In this section, I evaluate both the baseline CNN and the improved SE-ResBlock OCTNet on the <strong>held-out test set</strong> (1,000 OCT images). This provides an unbiased measure of real-world performance.</p><p>The following metrics are computed:</p><ul><li><strong>Test Accuracy</strong></li><li><strong>Precision, Recall, and F1-score</strong> for each class</li><li><strong>Confusion Matrix</strong> to inspect misclassification patterns</li></ul><p>These metrics allow a detailed comparison between the baseline and the improved architecture beyond training and validation curves.</p></section><section class="cell markdown-cell"><h4>Evaluation Function</h4></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>from sklearn.metrics import classification_report, confusion_matrix
+import numpy as np
+import torch
+
+@torch.no_grad()
+def evaluate_on_test(model, dataloader, device):
+    """
+    Evaluate the model on the test set and collect predictions + labels.
+
+    Args:
+        model: trained model to evaluate
+        dataloader: test DataLoader
+        device: CPU/GPU
+
+    Returns:
+        all_preds: numpy array of predicted labels
+        all_labels: numpy array of ground truth labels
+    """
+    model.eval()
+
+    all_preds = []
+    all_labels = []
+
+    for images, labels in dataloader:
+        images = images.to(device)
+        labels = labels.to(device)
+
+        outputs = model(images)
+        _, preds = torch.max(outputs, dim=1)
+
+        all_preds.extend(preds.cpu().numpy())
+        all_labels.extend(labels.cpu().numpy())
+
+    return np.array(all_preds), np.array(all_labels)</code></pre></section><section class="cell markdown-cell"><h4>Perform Baseline &amp; Improved model Testing</h4></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>print("&gt;&gt;&gt; Evaluating Baseline CNN on Test Set...")
+baseline_preds, baseline_labels = evaluate_on_test(baseline_model, test_loader, device)
+
+print("&gt;&gt;&gt; Evaluating Improved SE-ResBlock OCTNet on Test Set...")
+improved_preds, improved_labels = evaluate_on_test(improved_model, test_loader, device)</code></pre><div class="outputs"><pre class="output-text">&gt;&gt;&gt; Evaluating Baseline CNN on Test Set...
+&gt;&gt;&gt; Evaluating Improved SE-ResBlock OCTNet on Test Set...</pre></div></section><section class="cell markdown-cell"><h4>Print the Classification Report</h4></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>class_names = ["CNV", "DME", "DRUSEN", "NORMAL"]
+
+print("=== Baseline CNN Test Classification Report ===")
+print(classification_report(baseline_labels, baseline_preds, target_names=class_names))
+
+print("=== Improved SE-ResBlock OCTNet Test Classification Report ===")
+print(classification_report(improved_labels, improved_preds, target_names=class_names))</code></pre><div class="outputs"><pre class="output-text">=== Baseline CNN Test Classification Report ===
+              precision    recall  f1-score   support
+
+         CNV       0.86      0.98      0.91       250
+         DME       0.98      0.95      0.96       250
+      DRUSEN       1.00      0.85      0.92       250
+      NORMAL       0.96      1.00      0.98       250
+
+    accuracy                           0.94      1000
+   macro avg       0.95      0.94      0.94      1000
+weighted avg       0.95      0.94      0.94      1000
+
+=== Improved SE-ResBlock OCTNet Test Classification Report ===
+              precision    recall  f1-score   support
+
+         CNV       0.97      0.98      0.98       250
+         DME       0.99      0.98      0.98       250
+      DRUSEN       1.00      0.98      0.99       250
+      NORMAL       0.99      1.00      1.00       250
+
+    accuracy                           0.99      1000
+   macro avg       0.99      0.99      0.99      1000
+weighted avg       0.99      0.99      0.99      1000</pre></div></section><section class="cell markdown-cell"><h4>Visualization of the Confusion Matrix</h4></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Compute confusion matrices
+baseline_cm = confusion_matrix(baseline_labels, baseline_preds)
+improved_cm = confusion_matrix(improved_labels, improved_preds)
+
+# Plot side-by-side
+plt.figure(figsize=(12, 5))
+
+# ---------------- Baseline ----------------
+plt.subplot(1, 2, 1)
+sns.heatmap(
+    baseline_cm,
+    annot=True,
+    fmt="d",
+    cmap="Blues",
+    xticklabels=class_names,
+    yticklabels=class_names
+)
+plt.title("Baseline CNN - Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("True")
+
+# ---------------- Improved ----------------
+plt.subplot(1, 2, 2)
+sns.heatmap(
+    improved_cm,
+    annot=True,
+    fmt="d",
+    cmap="Blues",
+    xticklabels=class_names,
+    yticklabels=class_names
+)
+plt.title("Improved SE-ResBlock OCTNet - Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("True")
+
+plt.tight_layout()
+plt.show()</code></pre><div class="outputs"><figure class="output-figure"><img src="file:///C:/Users/user/Desktop/%EA%B0%9C%EC%9D%B8%EC%9E%90%EB%A3%8C/Baikseungwoo.github.io/assets/projects/oct-retinal-classification/notebook-cell-52-output-1.png" alt="cell 52 output 1"></figure></div></section><section class="cell markdown-cell"><h4>✔ Test Evaluation Interpretation</h4><p>The improved SE-ResBlock OCTNet clearly outperforms the baseline CNN on the test set.</p><h5>Overall Performance</h5><ul><li><strong>Baseline accuracy:</strong> 0.94</li><li><strong>Improved model accuracy:</strong> 0.99</li></ul><p>→ A significant improvement of <strong>+5% absolute accuracy</strong>.</p><h5>Per-Class Metrics</h5><ul><li>The improved model achieves <strong>precision/recall/F1 ≥ 0.98</strong> in all classes.</li><li>Especially notable improvements:</li><li><strong>CNV:</strong> F1 from 0.91 → 0.98</li><li><strong>DME:</strong> F1 from 0.96 → 0.99</li><li><strong>DRUSEN:</strong> F1 from 0.92 → 0.99</li><li><strong>NORMAL:</strong> already high but further improves (1.00 F1)</li></ul><p>This shows the improved model handles subtle disease variations more effectively.</p><h5>Confusion Matrix Insights</h5><ul><li>The improved model makes <strong>very few mistakes</strong>:</li><li>Only a small number of misclassifications between CNV ↔ DME and DRUSEN ↔ CNV.</li><li>NORMAL class is classified <strong>perfectly (250/250)</strong>.</li><li>Misclassification rates drop across all classes compared to the baseline.</li></ul><h5>Conclusion</h5><p>Residual connections and SE channel attention significantly enhance generalization, resulting in <strong>higher accuracy, stronger per-class performance, and fewer test errors</strong>. This confirms the value of architectural improvements in medical OCT image classification.</p><hr></section><section class="cell markdown-cell"><h3>4.6 Failure Case Analysis</h3><p>Even though the improved SE-ResBlock OCTNet achieves very high test accuracy, it still makes a few mistakes. In this section, I visualize some <strong>misclassified test samples (failure cases)</strong> and analyze possible reasons.</p><p>By inspecting these failure cases, I can better understand:</p><ul><li>which disease classes are still confusing for the model,</li><li>what kind of OCT patterns are difficult (e.g., low contrast, borderline lesions),</li><li>and how the model might be further improved in future work.</li></ul></section><section class="cell markdown-cell"><h4>Visualization of Failure Case in Improved model</h4></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>import matplotlib.pyplot as plt
+import numpy as np
+
+# Collect misclassified indices
+improved_wrong_indices = np.where(improved_preds != improved_labels)[0]
+print(f"Number of misclassified test samples: {len(improved_wrong_indices)}")
+
+# Number of samples you want to display
+num_to_show = min(6, len(improved_wrong_indices))
+
+# Determine rows and columns
+cols = 3
+rows = int(np.ceil(num_to_show / cols))
+
+plt.figure(figsize=(14, 6))
+
+for i in range(num_to_show):
+    idx = improved_wrong_indices[i]
+    img, true_label = test_dataset[idx]
+    pred_label = improved_preds[idx]
+
+    img_np = img.squeeze().numpy()
+
+    plt.subplot(rows, cols, i + 1)
+    plt.imshow(img_np, cmap="gray")
+    plt.axis("off")
+    plt.title(
+        f"True: {class_names[true_label]}\nPred: {class_names[pred_label]}",
+        fontsize=10
+    )
+
+plt.suptitle("Improved SE-ResBlock OCTNet - Failure Cases", fontsize=14)
+plt.tight_layout()
+plt.show()</code></pre><div class="outputs"><pre class="output-text">Number of misclassified test samples: 14</pre><figure class="output-figure"><img src="file:///C:/Users/user/Desktop/%EA%B0%9C%EC%9D%B8%EC%9E%90%EB%A3%8C/Baikseungwoo.github.io/assets/projects/oct-retinal-classification/notebook-cell-56-output-2.png" alt="cell 56 output 2"></figure></div></section><section class="cell markdown-cell"><h4>✔ Failure Case Analysis (Qualitative)</h4><p>By visualizing several misclassified test images, I observed the following:</p><ul><li>Most errors of the improved model occur between <strong>CNV and DME</strong> or</li></ul><p>between <strong>CNV and DRUSEN</strong>, which can show partially overlapping fluid or elevation patterns in OCT scans.</p><ul><li>Some misclassified images have <strong>very subtle or borderline lesions</strong></li></ul><p>with low contrast, making them difficult even for human observers.</p><ul><li>The NORMAL class is predicted almost perfectly, and I could not</li></ul><p>find clear NORMAL → disease misclassifications among the inspected cases.</p><ul><li>Compared to the baseline CNN, the improved model produces **fewer</li></ul><p>ambiguous predictions** and concentrates its remaining errors on a small subset of visually challenging images.</p><p>These failure cases suggest that future improvements could focus on:</p><ul><li>enhancing sensitivity to small or low-contrast lesions,</li><li>incorporating higher-resolution inputs or multi-scale features,</li><li>and possibly adding more targeted data augmentation for difficult patterns.</li></ul><hr></section><section class="cell markdown-cell"><h3>4.7 Summary &amp; Conclusion</h3><p>In this project, I compared a simple <strong>Baseline CNN</strong> with an improved <strong>SE-ResBlock OCTNet</strong> on the OCT2017 retinal disease classification task.</p><h4>✔ Performance Summary</h4><table><thead><tr><th>Model</th><th>Best Val Acc</th><th>Test Acc</th><th>Notes</th></tr></thead><tbody><tr><td><strong>Baseline CNN</strong></td><td>~0.913</td><td><strong>0.94</strong></td><td>Stable but limited feature extraction</td></tr><tr><td><strong>SE-ResBlock OCTNet</strong></td><td>~0.941</td><td><strong>0.99</strong></td><td>Stronger generalization and fewer errors</td></tr></tbody></table><p>The improved model achieves around <strong>+5% higher test accuracy</strong>, with large gains in precision/recall for all four classes.</p><h4>✔ What the Results Show</h4><ol><li><strong>Residual connections</strong> helped stabilize training</li></ol><p>→ faster convergence and smoother validation curves.</p><ol><li><strong>SE (Squeeze-and-Excitation) attention</strong> enriched channel-wise feature selection</li></ol><p>→ improved discrimination for subtle OCT structures (e.g., DRUSEN, DME).</p><ol><li><strong>Improved model has fewer failure cases</strong>, and the confusion matrix shows</li></ol><p>dramatically reduced cross-class misclassifications.</p><ol><li><strong>Training time per epoch (~185–190s)</strong> remained comparable between models,</li></ol><p>proving that the improved architecture provides better accuracy <strong>without a significant computational cost increase</strong>.</p><h4>✔ What Failure Cases Suggest</h4><p>The remaining misclassifications mainly come from:</p><ul><li>ambiguous boundaries between CNV ↔ DME</li><li>low-contrast DRUSEN lesions</li><li>borderline patterns that are difficult even for experts</li></ul><p>This indicates potential for improvement with:</p><ul><li>higher-resolution inputs</li><li>stronger augmentation</li><li>multi-scale feature extraction</li></ul><h4>✔ Final Conclusion</h4><p>The experiment clearly demonstrates that incorporating <strong>Residual blocks + SE channel attention</strong> significantly enhances performance on retinal OCT classification.</p><p>The improved model:</p><ul><li>achieves <strong>higher accuracy</strong>,</li><li>shows <strong>better generalization</strong>,</li><li>and produces <strong>far fewer classification errors</strong>,</li></ul><p>making it a more reliable architecture for real-world medical image analysis.</p><hr></section><section class="cell markdown-cell"><h2>📌 5. Conclusion</h2><hr></section><section class="cell markdown-cell"><h3>5.1 Summary Plot</h3></section><section class="cell code-cell"><div class="cell-label">Code</div><pre><code>import matplotlib.pyplot as plt
+import numpy as np
+
+# Values
+baseline_test_acc = 0.94
+improved_test_acc = 0.99
+
+baseline_f1 = 0.94
+improved_f1 = 0.99
+
+baseline_time = 3688.88 / 60
+improved_time = 3749.08 / 60
+
+# --- Graph 1: Accuracy &amp; F1 ---
+plt.figure(figsize=(6,4))
+plt.bar(["Baseline Acc", "Improved Acc"], [baseline_test_acc, improved_test_acc], label="Accuracy")
+plt.bar(["Baseline F1", "Improved F1"], [baseline_f1, improved_f1], label="F1-score", alpha=0.6)
+plt.ylim(0.85, 1.0)
+plt.title("Accuracy and Macro F1 Comparison")
+plt.ylabel("Value")
+plt.grid(axis="y", linestyle="--", alpha=0.3)
+plt.show()
+
+# --- Graph 2: Training Time ---
+plt.figure(figsize=(6,4))
+plt.bar(["Baseline", "Improved"], [baseline_time, improved_time], color=["steelblue","orange"])
+plt.title("Training Time Comparison")
+plt.ylabel("Minutes")
+plt.grid(axis="y", linestyle="--", alpha=0.3)
+plt.show()</code></pre><div class="outputs"><figure class="output-figure"><img src="file:///C:/Users/user/Desktop/%EA%B0%9C%EC%9D%B8%EC%9E%90%EB%A3%8C/Baikseungwoo.github.io/assets/projects/oct-retinal-classification/notebook-cell-61-output-1.png" alt="cell 61 output 1"></figure><figure class="output-figure"><img src="file:///C:/Users/user/Desktop/%EA%B0%9C%EC%9D%B8%EC%9E%90%EB%A3%8C/Baikseungwoo.github.io/assets/projects/oct-retinal-classification/notebook-cell-61-output-2.png" alt="cell 61 output 2"></figure></div></section><section class="cell markdown-cell"><hr><h3>5.2 Summary of Findings</h3><p>In this mini project, I investigated <strong>retinal OCT image classification</strong> using two CNN architectures:</p><ol><li><strong>Baseline CNN</strong></li><li><strong>Improved SE-ResBlock OCTNet</strong> (Residual blocks + SE channel attention)</li></ol><p>Key quantitative results:</p><ul><li><strong>Best validation accuracy</strong></li><li>Baseline: ~0.91</li><li>Improved: ~0.94</li></ul><ul><li><strong>Test accuracy (1,000 images)</strong></li><li>Baseline: <strong>0.94</strong></li><li>Improved: <strong>0.99</strong></li></ul><ul><li><strong>Per-class F1-score (test set, 4 classes)</strong></li><li>Baseline: 0.91–0.96</li><li>Improved: 0.98–1.00</li></ul><p>Despite having a similar training time per epoch (~185–190 seconds), the improved model achieves <strong>substantially higher accuracy and F1-scores</strong> across all classes.</p><hr><h3>5.3 Key Insights</h3><ol><li><strong>Architectural changes matter more than minor hyperparameter tweaks.</strong></li></ol><p>Adding <strong>residual connections</strong> enabled deeper feature extraction while keeping optimization stable, and <strong>SE attention</strong> helped the model focus on disease-relevant channels in OCT scans.</p><ol><li><strong>Validation and test performance are consistent.</strong></li></ol><p>The learning curves and test metrics tell a coherent story: the improved model not only fits the training data better but also generalizes more strongly to unseen images.</p><ol><li><strong>Error patterns are concentrated on challenging borderline cases.</strong></li></ol><p>Failure case analysis showed that remaining errors mostly occur between classes with visually similar patterns (e.g., CNV vs. DME, CNV vs. DRUSEN), often with low contrast or subtle lesions.</p><ol><li><strong>Computational cost remains practical.</strong></li></ol><p>Training time per epoch is very similar for both models, meaning that the performance gain is achieved <strong>without a large increase in computational overhead</strong>, which is important for real-world deployment.</p><hr><h3>5.4 Limitations and Future Work</h3><p>Possible directions to further improve this work include:</p><ul><li><strong>Higher-resolution and multi-scale features</strong></li></ul><p>Using larger input resolutions or multi-scale CNN blocks could help the model capture fine-grained structures that are important in borderline cases.</p><ul><li><strong>Stronger or task-specific data augmentation</strong></li></ul><p>Designing augmentations that mimic real clinical variations (e.g., motion blur, varying noise levels, contrast changes) may improve robustness.</p><ul><li><strong>Class imbalance handling and calibration</strong></li></ul><p>Although this dataset is relatively balanced, future datasets may not be. Exploring focal loss, class-balanced loss, or calibration techniques (e.g., temperature scaling) would be valuable.</p><ul><li><strong>Explainability and clinician interaction</strong></li></ul><p>Adding saliency maps or Grad-CAM visualizations could help clinicians understand <em>why</em> the model makes certain decisions and increase trust in clinical settings.</p><p>Overall, this project demonstrates that carefully designed architectural improvements—specifically <strong>Residual blocks plus SE channel attention</strong>—can significantly enhance performance on retinal OCT classification while keeping computational cost reasonable. This suggests that attention-augmented residual networks are a promising direction for future medical imaging models.</p><hr></section><section class="cell markdown-cell"><h1>The End</h1></section></main></body>
+</html>
