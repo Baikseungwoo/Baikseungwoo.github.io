@@ -31,9 +31,9 @@ items:
       - label: 발표자료
         value: "48 pages"
     problem_visual:
-      title: TukTak 차별화 포인트
-      image: /assets/projects/tuktak/appendix-erd-detail.png
-      caption: 사진 기반 AI 견적, 리스크 리포트, 역경매 비교, 고객-시공자 직접 채팅을 핵심 차별점으로 정리했습니다.
+      title: TukTak logo
+      image: /assets/projects/tuktak/tuktak-logo.webp
+      caption: AI 기반 집수리 견적 및 시공자 매칭 서비스 TukTak의 로고입니다.
     architecture_visual:
       title: TukTak 배포 시스템 아키텍처
       image: /assets/projects/tuktak/tuktak-system-architecture.png
@@ -57,6 +57,8 @@ items:
         title: Frontend
         body: React 기반 화면에서 견적 요청, 리포트 조회, 매칭 진행, 시공 이력 확인 흐름을 제공합니다.
       - icon: devicon-fastapi-plain
+        logo: /assets/projects/tuktak/logos/fastapi.svg
+        logo_alt: FastAPI
         title: Backend API
         body: FastAPI 도메인 라우터로 사용자, 견적, 리포트, 매칭, 견적 제안, 알림 API를 분리했습니다.
       - icon: fa fa-database
@@ -236,6 +238,8 @@ items:
     link: https://github.com/TUKTAKxAI
     presentation_url: https://www.canva.com/d/3oTSq4QxhdBHLhD
     presentation_pdf: /assets/projects/tuktak-ai.pdf
+    demo_video_title: TukTak 서비스 데모
+    demo_video_embed: https://www.youtube.com/embed/4mjZDKTvN-4
 
   - title: Chalkak App
     category: Mobile AI

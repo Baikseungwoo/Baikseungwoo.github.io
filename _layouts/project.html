@@ -84,7 +84,11 @@
             <div class="project-detail__icon-grid">
               {% for node in current_project.architecture_nodes %}
               <article>
+                {% if node.logo %}
+                <img class="project-detail__node-logo" src="{{ node.logo | relative_url }}" alt="{{ node.logo_alt | default: node.title }}">
+                {% else %}
                 <i class="{{ node.icon }}" aria-hidden="true"></i>
+                {% endif %}
                 <h3>{{ node.title }}</h3>
                 <p>{{ node.body }}</p>
               </article>
@@ -95,7 +99,11 @@
             <div class="project-detail__icon-grid project-detail__icon-grid--compact">
               {% for step in current_project.aws_pipeline %}
               <article>
+                {% if step.logo %}
+                <img class="project-detail__node-logo" src="{{ step.logo | relative_url }}" alt="{{ step.logo_alt | default: step.title }}">
+                {% else %}
                 <i class="{{ step.icon }}" aria-hidden="true"></i>
+                {% endif %}
                 <h3>{{ step.title }}</h3>
                 <p>{{ step.body }}</p>
               </article>

@@ -1,0 +1,5 @@
+<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <title>FastAPI</title>
+  <circle cx="12" cy="12" r="12" fill="#009688"/>
+  <path d="M12.9 2.8 5.8 13.1h5.1l-1.3 8.1 8.6-11h-5.4l.1-7.4z" fill="#fff"/>
+</svg>

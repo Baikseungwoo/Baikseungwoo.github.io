@@ -376,7 +376,8 @@
     box-shadow: 0 12px 24px rgba(26, 34, 44, 0.06);
   }
 
-  i {
+  i,
+  .project-detail__node-logo {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -387,6 +388,11 @@
     background: var(--project-soft);
     color: var(--project-accent);
     font-size: 22px;
+  }
+
+  .project-detail__node-logo {
+    padding: 8px;
+    object-fit: contain;
   }
 
   h3 {
