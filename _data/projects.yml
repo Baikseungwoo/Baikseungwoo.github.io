@@ -455,13 +455,17 @@ items:
       title: OCT2017 class samples
       caption: CNV, DME, DRUSEN, NORMAL 4개 클래스의 OCT 샘플 이미지를 확인하고 분류 문제의 시각적 차이를 파악했습니다.
     architecture_visual:
-      image: /assets/projects/oct-retinal-classification/experiment-architecture.svg
+      image: /assets/projects/oct-retinal-classification/experiment-architecture.png
       title: OCT model experiment architecture
       caption: OCT2017 데이터 입력부터 전처리, 증강, Baseline CNN과 SE-ResBlock OCTNet 비교, 최종 평가까지의 실험 흐름입니다.
     architecture_secondary_visual:
       image: /assets/projects/oct-retinal-classification/notebook-cell-18-markdown-1.png
       title: Baseline CNN architecture
       caption: 기준 모델은 4개의 convolution block과 global average pooling 기반 classifier로 구성했습니다.
+    architecture_extra_visuals:
+      - image: /assets/projects/oct-retinal-classification/notebook-cell-20-markdown-1.png
+        title: Improved SE-ResBlock OCTNet architecture
+        caption: Baseline CNN에 Residual Connection과 SE Channel Attention을 추가해 더 깊은 특징 추출과 채널 중요도 학습이 가능하도록 개선한 모델 구조입니다.
     architecture_nodes:
       - icon: fa fa-database
         title: OCT2017 Dataset

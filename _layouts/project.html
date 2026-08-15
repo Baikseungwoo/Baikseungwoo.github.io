@@ -88,6 +88,14 @@
               <figcaption>{{ current_project.architecture_secondary_visual.caption }}</figcaption>
             </figure>
             {% endif %}
+            {% if current_project.architecture_extra_visuals %}
+              {% for visual in current_project.architecture_extra_visuals %}
+              <figure class="project-detail__wide-visual project-detail__wide-visual--stack">
+                <img src="{{ visual.image | relative_url }}" alt="{{ visual.title }}">
+                <figcaption>{{ visual.caption }}</figcaption>
+              </figure>
+              {% endfor %}
+            {% endif %}
             <p>{{ current_project.architecture }}</p>
             <p class="project-detail__support-copy">{{ current_project.deployment }}</p>
             {% if current_project.architecture_nodes %}
