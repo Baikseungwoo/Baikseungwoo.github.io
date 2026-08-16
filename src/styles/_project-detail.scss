@@ -326,6 +326,29 @@
   margin-bottom: 18px;
 }
 
+.project-detail__wide-visual--large {
+  max-width: 860px;
+  margin-right: auto;
+  margin-left: auto;
+
+  img {
+    width: 100%;
+    min-height: 780px;
+    object-fit: contain;
+    background: #f8fafc;
+  }
+
+  figcaption {
+    font-size: 15px;
+  }
+
+  @media only screen and (max-width: 720px) {
+    img {
+      min-height: auto;
+    }
+  }
+}
+
 .project-detail__wide-visual--deploy {
   margin-bottom: 22px;
 

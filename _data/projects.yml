@@ -626,25 +626,187 @@ items:
     tone: data
     detail_path: /projects/nyc-taxi-big-data/
     period: "2025.09~2025.12"
-    role: HDFS 적재 / PySpark 전처리 / TLI-CI 산출
-    summary: 약 30GB 뉴욕 택시/교통 데이터를 HDFS와 PySpark 기반 파이프라인으로 처리한 빅데이터 분석 프로젝트입니다.
-    problem: 대용량 택시 운행 데이터와 교통 속도 데이터를 함께 처리해 이동 시간 변동성과 혼잡도를 분석할 수 있는 데이터 파이프라인이 필요했습니다.
-    architecture: Hadoop HDFS에 원천 데이터를 적재하고 Bronze, Silver, Gold Layer로 전처리와 분석용 Mart 생성을 분리했습니다.
-    development: PySpark로 CSV를 Parquet으로 변환하고, 이상치 제거, 시간 블록 생성, Taxi Zone Lookup 조인, Borough 기준 집계를 수행했습니다.
-    deployment: VMware Linux VM 기반 분석 환경에서 HDFS 저장소를 구성하고, 저장공간 부족 문제를 해결하기 위해 디스크를 확장하고 HDFS Data Directory를 재설정했습니다.
-    troubleshooting: 기본 VM 디스크 용량으로는 약 30GB 데이터를 처리하기 어려워 200GB 디스크를 추가하고 파티션 마운트, 권한, HDFS 경로 문제를 해결했습니다.
-    result: 원천 데이터 적재부터 최종 분석용 Mart 생성까지 데이터 엔지니어링 전 과정을 구현하고 TLI/CI 지표를 산출했습니다.
+    role: HDFS 적재 / Spark Layer 설계 / TLI-CI 분석
+    summary: NYC Yellow Taxi, Traffic Speed, Taxi Zone 데이터를 Hadoop HDFS와 PySpark 기반 레이어드 파이프라인으로 처리하고 Taxi Luck Index와 Congestion Index를 산출한 빅데이터 프로젝트입니다.
+    overview_title: 택시 운행 데이터에서 TLI 분석까지
+    problem: 같은 출발지, 시간대, 경로처럼 보이는 택시 이동도 실제 소요 시간은 크게 흔들립니다. 이 프로젝트는 약 30GB 규모의 NYC 택시/교통 데이터를 처리해 이동 시간의 불확실성을 Taxi Luck Index로 정량화하고, 교통 혼잡도와 함께 분석할 수 있는 데이터 파이프라인을 구현했습니다.
+    architecture_label: Data Pipeline
+    architecture_title: HDFS 기반 레이어드 데이터 처리 구조
+    architecture: Local Windows의 택시 CSV와 교통 속도 CSV를 VMware Linux 환경으로 전송한 뒤 HDFS에 적재하고, Spark 기반 Bronze-Silver-Gold-Platinum Layer로 원천 보존, 품질 정제, 피처 생성, 최종 지표 산출을 분리했습니다. 모든 중간 레이어는 Parquet으로 관리해 압축 효율과 처리 속도를 확보했습니다.
+    development: PySpark와 Spark SQL로 CSV 스키마 추론, Null 제거, 음수 duration 제거, 15분 단위 time block 생성, pickup/dropoff borough 매핑, Taxi Zone Lookup 조인, TLI/CI 집계를 구현했습니다. 최종 분석용 Mart는 TLI_FINAL.csv와 CI_FINAL.csv 형태로 내보내 Python 분석과 대시보드 시각화에 연결했습니다.
+    deployment: VMware Linux VM에 Hadoop HDFS 분석 환경을 구성하고 `/data` 기반 HDFS 경로를 설계했습니다. HDFS에서 처리된 Platinum Layer 결과를 VM 로컬로 가져온 뒤 Windows 환경으로 전송하고, 분산 Parquet 결과를 Pandas로 병합해 최종 CSV 산출물로 정리했습니다.
+    troubleshooting: 기본 20GB VM 디스크로는 약 30GB 원천 데이터를 적재하기 어려워 업로드 실패와 permission denied 문제가 발생했습니다. VMware 디스크를 200GB로 확장하고 Linux 파티션 포맷, 마운트, 권한 설정, HDFS Data Directory 재설정을 진행해 안정적으로 대용량 데이터를 적재할 수 있게 했습니다.
+    result: 약 30GB 원천 데이터를 분석 가능한 Mart로 정제하고, Borough/Hour/15분 Block 기준 TLI와 CI를 산출했습니다. 회귀 분석에서는 CI와 TLI의 단순 선형 관계가 낮게 나타나, TLI가 단순 혼잡도와는 다른 이동 시간 변동성 지표임을 확인했습니다.
+    problem_visual:
+      image: /assets/projects/nyc-taxi-big-data/slide-02.png
+      title: Taxi Luck Project motivation
+      caption: 동일한 이동 조건에서도 달라지는 택시 소요 시간을 Taxi Luck이라는 문제로 정의하고, TLI 지표로 정량화했습니다.
+    metrics:
+      - label: Raw Data
+        value: 30GB
+      - label: Storage
+        value: 20GB -> 200GB
+      - label: Data Layers
+        value: 4 Layers
+      - label: Indicators
+        value: TLI / CI
+    architecture_visual:
+      image: /assets/projects/nyc-taxi-big-data/bd-architecture.png
+      title: Big data processing architecture
+      caption: Windows Local, VMware Linux, HDFS/Spark Cluster, Python 분석, Dashboard까지 이어지는 전체 데이터 처리 구조입니다.
+    architecture_secondary_visual:
+      image: /assets/projects/nyc-taxi-big-data/slide-08.png
+      title: Spark layered architecture
+      caption: Bronze, Silver, Gold Layer를 분리해 원천 보존, 정제, 최종 집계 흐름을 추적 가능하게 설계했습니다.
+    architecture_extra_visuals:
+      - image: /assets/projects/nyc-taxi-big-data/slide-14.png
+        title: TLI and CI calculation
+        caption: 소요 시간 표준편차와 평균을 이용한 TLI, 자유 속도 대비 평균 속도 기반 CI를 Spark SQL 집계로 산출했습니다.
+    architecture_nodes:
+      - icon: fa fa-database
+        title: Data Sources
+        body: NYC Yellow Taxi Trip Data, NYC Traffic Speed Data, Taxi Zone Lookup을 결합해 운행, 속도, 지역 정보를 함께 분석했습니다.
+      - icon: fa fa-hdd-o
+        title: HDFS Storage
+        body: 대용량 원천 CSV를 HDFS에 적재하고 `/data` 하위 레이어 경로로 관리해 Spark 처리 기준 저장소를 구성했습니다.
+      - icon: fa fa-filter
+        title: Silver Cleaning
+        body: Null 시간값, 음수 duration, 분석에 불필요한 fare 상세 컬럼을 제거해 가벼운 분석용 데이터셋으로 정제했습니다.
+      - icon: fa fa-clock-o
+        title: Time Blocking
+        body: pickup 시각을 15분 단위 block으로 변환하고 hour, AM/PM, duration 파생 컬럼을 생성했습니다.
+      - icon: fa fa-map-marker
+        title: Borough Mapping
+        body: PULocationID와 DOLocationID를 Taxi Zone Lookup과 조인해 Manhattan, Queens 같은 사람이 읽을 수 있는 지역 단위로 변환했습니다.
+      - icon: fa fa-line-chart
+        title: TLI / CI Mart
+        body: Borough, Hour, Block 기준으로 이동 시간 변동성(TLI)과 혼잡도(CI)를 집계해 최종 분석용 Mart를 만들었습니다.
+    troubleshooting_items:
+      - icon: fa fa-hdd-o
+        title: VM 저장공간 부족
+        problem: 초기 VM 디스크 20GB로는 약 30GB Raw Data 업로드와 압축 해제, HDFS 적재를 동시에 처리하기 어려웠습니다.
+        solution: VMware 디스크를 200GB로 확장하고 Linux 파티션 생성, 포맷, 마운트, 소유권 설정까지 진행해 HDFS 데이터 경로를 안정화했습니다.
+      - icon: fa fa-lock
+        title: Permission Denied
+        problem: 확장 디스크와 HDFS Data Directory를 연결하는 과정에서 권한 문제로 파일 적재와 HDFS 서비스 동작이 막혔습니다.
+        solution: 디렉터리 소유권과 권한을 재설정하고 HDFS 설정 경로를 수정해 Spark 처리 전 원천 데이터 적재가 가능하도록 정리했습니다.
+      - icon: fa fa-compress
+        title: 대용량 처리 최적화
+        problem: CSV 그대로 처리하면 스캔 비용이 크고 불필요한 컬럼까지 반복 처리되어 Spark 작업 시간이 길어졌습니다.
+        solution: 중간 산출물을 Parquet으로 변환하고 TLI 분석에 필요한 Location, Time, Speed 중심으로 컬럼을 줄여 처리 부담을 낮췄습니다.
+      - icon: fa fa-area-chart
+        title: 분석 해상도 한계
+        problem: Borough 단위 분석은 공간 해상도가 넓어 CI와 TLI의 선형 관계를 명확하게 설명하기 어려웠습니다.
+        solution: 결과를 한계까지 함께 정리하고, 향후 Zone/Road 단위 세분화와 Kafka/Airflow 기반 자동화 파이프라인을 개선 방향으로 제시했습니다.
+    management_visual:
+      image: /assets/projects/nyc-taxi-big-data/dashboard-crop.png
+      title: Route Analysis Dashboard
+      caption: 최종 산출된 TLI/CI 데이터를 기반으로 지역과 시간 조건별 택시 이동 안정성을 확인할 수 있는 대시보드 화면입니다.
+    management_visual_large: true
+    leadership_label: Deliverables
+    leadership_title: 최종 산출물과 분석 결과
+    leadership:
+      - title: Analysis Ready Mart
+        body: Raw Data를 Bronze-Silver-Gold-Platinum Layer로 정제해 TLI_FINAL.csv와 CI_FINAL.csv 형태의 최종 분석용 Mart를 생성했습니다.
+      - title: Route Analysis Dashboard
+        body: 산출된 TLI/CI 결과를 기반으로 지역과 시간 조건에 따른 택시 이동 안정성을 확인할 수 있는 분석 대시보드 화면을 구성했습니다.
+    deliverables:
+      - icon: fa fa-file-code-o
+        title: PySpark ETL
+      - icon: fa fa-table
+        title: TLI_FINAL.csv
+      - icon: fa fa-table
+        title: CI_FINAL.csv
+      - icon: fa fa-bar-chart
+        title: Regression Analysis
+      - icon: fa fa-dashboard
+        title: Route Dashboard
     highlights:
       - Hadoop HDFS 기반 저장 환경을 구성하고 VMware 저장공간 문제를 직접 해결했습니다.
       - Bronze-Silver-Gold Layer 구조로 원천 보존, 전처리, 파생 변수 생성, 최종 집계를 분리했습니다.
       - TLI와 CI 지표를 산출해 택시 이동 시간 변동성과 혼잡도를 분석했습니다.
-    stack:
-      - Hadoop
-      - HDFS
-      - PySpark
-      - Spark SQL
-      - Python
-      - Linux VM
+    tech_groups:
+      - title: Big Data Platform
+        icon: fa fa-server
+        items:
+          - name: Hadoop
+            icon: devicon-hadoop-plain
+          - name: HDFS
+            icon: fa fa-database
+          - name: Apache Spark
+            icon: devicon-apache-plain
+          - name: PySpark
+            icon: devicon-python-plain
+          - name: Spark SQL
+            icon: fa fa-code
+      - title: Processing & Analysis
+        icon: fa fa-line-chart
+        items:
+          - name: Python
+            icon: devicon-python-plain
+          - name: Pandas
+            icon: devicon-pandas-plain
+          - name: Parquet
+            icon: fa fa-archive
+          - name: Regression
+            icon: fa fa-area-chart
+          - name: Dashboard
+            icon: fa fa-dashboard
+      - title: Infrastructure
+        icon: fa fa-cloud
+        items:
+          - name: VMware
+            icon: fa fa-desktop
+          - name: Linux VM
+            icon: devicon-linux-plain
+          - name: SCP
+            icon: fa fa-exchange
+          - name: Disk Partition
+            icon: fa fa-hdd-o
+          - name: HDFS Config
+            icon: fa fa-cog
+      - title: Data Modeling
+        icon: fa fa-sitemap
+        items:
+          - name: Bronze Layer
+            icon: fa fa-cube
+          - name: Silver Layer
+            icon: fa fa-filter
+          - name: Gold Layer
+            icon: fa fa-database
+          - name: Platinum Layer
+            icon: fa fa-star
+          - name: TLI / CI
+            icon: fa fa-calculator
+    appendix_title: 데이터 처리와 분석 화면
+    visual_assets:
+      - title: 데이터 소스
+        image: /assets/projects/nyc-taxi-big-data/slide-03.png
+        caption: Yellow Taxi Trip, Traffic Speed, Taxi Zone Lookup 데이터를 결합해 이동 시간과 교통 속도, 지역 정보를 함께 사용했습니다.
+      - title: 최종 분석용 Mart
+        image: /assets/projects/nyc-taxi-big-data/slide-05.png
+        caption: 약 30GB Raw Data를 분석 가능한 TLI/CI 데이터셋으로 정제했습니다.
+      - title: Bronze Layer 적재
+        image: /assets/projects/nyc-taxi-big-data/slide-09.png
+        caption: Spark inferSchema로 대용량 CSV의 타입을 추론하고 Raw Data를 Parquet 기반 Bronze Layer로 변환했습니다.
+      - title: Silver Layer 품질 정제
+        image: /assets/projects/nyc-taxi-big-data/slide-10.png
+        caption: Pickup/Dropoff 시간 Null 제거 등 기본 품질 규칙을 적용해 분석 오류를 줄였습니다.
+      - title: Silver Layer 피처 생성
+        image: /assets/projects/nyc-taxi-big-data/slide-11.png
+        caption: 15분 time block, duration, AM/PM 컬럼을 생성해 시간대별 변동성 분석 기준을 만들었습니다.
+      - title: Gold Layer 지역 매핑
+        image: /assets/projects/nyc-taxi-big-data/slide-13.png
+        caption: Taxi Zone Lookup 조인으로 LocationID를 Borough/Zone 정보로 변환했습니다.
+      - title: Export & Integration
+        image: /assets/projects/nyc-taxi-big-data/slide-15.png
+        caption: HDFS 결과를 VM과 Windows 환경으로 옮기고 분산 Parquet 결과를 최종 CSV로 병합했습니다.
+      - title: 회귀 분석 결과
+        image: /assets/projects/nyc-taxi-big-data/slide-16.png
+        caption: CI와 TLI의 선형 관계가 낮게 나타나 TLI가 단순 혼잡도와 다른 이동 시간 불확실성 지표임을 확인했습니다.
+      - title: Route Analysis Dashboard
+        image: /assets/projects/nyc-taxi-big-data/slide-17.png
+        caption: 최종 산출 지표를 서비스 관점에서 확인할 수 있도록 대시보드 형태로 시각화했습니다.
     link: https://docs.google.com/presentation/d/1ggftALXueGg85IgzxbEmJn8PwVdj5SMl4ARLWOlZ8QM/edit?usp=sharing
     presentation_url: https://docs.google.com/presentation/d/1ggftALXueGg85IgzxbEmJn8PwVdj5SMl4ARLWOlZ8QM/edit?usp=sharing
     presentation_pdf: /assets/projects/nyc-taxi-big-data.pdf
@@ -655,24 +817,134 @@ items:
     detail_path: /projects/campusshare/
     period: "2024.09~2024.12"
     role: Spring Boot API / JPA 설계 / Swagger 문서화
-    summary: 강의 자료 공유와 Q&A 기능을 제공하는 캠퍼스 지식 공유 플랫폼의 백엔드 API를 구현했습니다.
-    problem: 학생들이 강의 자료, 과제 팁, 질문과 답변을 공유할 수 있는 학업 커뮤니티 플랫폼의 안정적인 백엔드 API가 필요했습니다.
-    architecture: User, Share, Question, Answer 도메인을 분리하고 Controller, Service, Repository 계층으로 책임을 나누었습니다.
-    development: 자료 등록, 전체 조회, 제목 검색, 다운로드 카운트 증가, 질문 등록, 답변 등록/조회/삭제 API를 구현했습니다.
+    summary: 강의 노트, 시험 자료, 과제 접근법을 공유하고 검색할 수 있는 학업 자료 공유 커뮤니티 CampusShare의 백엔드 API를 구현했습니다.
+    overview_title: 강의 자료 공유와 Q&A를 하나의 API로
+    problem: CampusShare는 학생들이 강의 자료와 시험 자료, 과제 접근법을 공유하며 후배들이 참고할 수 있는 기록을 남기는 학업 커뮤니티를 목표로 합니다. 이를 위해 게시판 CRUD, 키워드/카테고리 검색, 사용자 관리, Q&A 흐름을 안정적으로 처리할 수 있는 백엔드 API가 필요했습니다.
+    problem_visual:
+      image: /assets/projects/campusshare/campusshare-logo.png
+      title: CampusShare logo
+      caption: 학업 자료와 경험을 공유하는 커뮤니티 서비스라는 방향을 보여주는 CampusShare 프로젝트 로고입니다.
+    architecture_label: System
+    architecture_title: Spring Boot 기반 백엔드 아키텍처
+    architecture: React 클라이언트와 Swagger UI가 REST API를 호출하고, Spring Boot 서버는 Controller, Service, Repository 계층을 거쳐 JPA Repository로 MySQL에 데이터를 저장하는 구조입니다. User, Share, Question, Answer 도메인을 분리해 게시판, 자료 공유, 질문/답변 기능을 확장 가능하게 설계했습니다.
+    development: 게시글 생성, 수정, 삭제, 키워드/카테고리 검색, 자료 등록, 전체 조회, 다운로드 카운트 증가, 사용자 관리, 질문 등록, 답변 등록/조회/삭제 API를 구현했습니다. API 응답 구조를 일관되게 맞추고 Swagger 문서화를 적용해 React 프론트엔드 연동과 테스트가 쉽도록 구성했습니다.
     deployment: MySQL을 Docker Compose로 실행하고 Swagger/OpenAPI를 적용해 프론트엔드와 연동 가능한 API 문서를 제공했습니다.
     troubleshooting: 게시물, 질문, 답변, 사용자 간 연관관계를 명확히 나누고 응답 구조를 일관되게 정리해 프론트엔드 연동 혼선을 줄였습니다.
     result: 자료 공유와 Q&A를 포함한 핵심 백엔드 API를 구현하고, 문서화와 로컬 실행 환경을 통해 협업 편의성을 높였습니다.
+    architecture_visual:
+      image: /assets/projects/campusshare/campusshare-architecture.png
+      title: CampusShare backend architecture
+      caption: React Client, Swagger/API Client, Spring Boot REST API, JPA Repository, MySQL, Docker Compose, GitHub/IntelliJ 개발 환경을 한눈에 볼 수 있도록 직접 구성한 시스템 아키텍처입니다.
+    architecture_nodes:
+      - icon: fa fa-users
+        title: User / Client
+        body: 사용자는 React 화면에서 게시판, 자료 검색, 로그인, Q&A 기능을 이용하고 Swagger UI로 API 동작을 검증할 수 있습니다.
+      - icon: fa fa-leaf
+        title: Spring Boot API
+        body: 게시글 CRUD, 키워드/카테고리 검색, 사용자 관리, 자료 공유, Q&A 요청을 REST API로 처리했습니다.
+      - icon: fa fa-database
+        title: JPA / MySQL
+        body: User, Share, Question, Answer 엔티티를 JPA로 매핑하고 MySQL에 영속화했습니다.
+      - icon: fa fa-file-text-o
+        title: Swagger Docs
+        body: API 명세를 Swagger/OpenAPI로 문서화해 요청/응답 확인과 프론트엔드 연동 편의성을 높였습니다.
+      - icon: fa fa-cubes
+        title: Docker Compose
+        body: MySQL 실행 환경을 Docker Compose로 구성해 로컬 개발과 테스트 환경을 빠르게 재현할 수 있게 했습니다.
+      - icon: fa fa-github
+        title: GitHub Collaboration
+        body: GitHub 기반으로 소스 코드를 관리하고 백엔드 API 변경사항을 추적했습니다.
+    troubleshooting_items:
+      - icon: fa fa-sitemap
+        title: 도메인 관계 정리
+        problem: 게시물, 질문, 답변, 사용자 간 연관관계가 섞이면 API 응답 구조가 복잡해지고 프론트엔드 연동이 어려워질 수 있었습니다.
+        solution: User, Share, Question, Answer 도메인을 분리하고 계층별 책임을 명확히 나눠 응답 구조를 일관되게 정리했습니다.
+      - icon: fa fa-file-text-o
+        title: API 연동 혼선 감소
+        problem: API 경로와 요청/응답 형식이 명확하지 않으면 프론트엔드와 백엔드 사이에서 테스트 비용이 커질 수 있었습니다.
+        solution: Swagger/OpenAPI 문서를 적용해 API 사용 방법을 문서화하고 브라우저에서 바로 테스트할 수 있도록 만들었습니다.
+      - icon: fa fa-database
+        title: 로컬 DB 실행 환경
+        problem: 팀원마다 MySQL 설치와 설정이 달라지면 로컬 실행 환경이 달라지는 문제가 발생할 수 있었습니다.
+        solution: Docker Compose로 MySQL 실행 환경을 정의해 동일한 DB 환경에서 개발하고 테스트할 수 있게 했습니다.
+    management_visual:
+      image: /assets/projects/campusshare/campusshare-home.png
+      title: CampusShare home and popular posts
+      caption: README에 포함된 메인 화면입니다. 학년/학기 조건 검색, 인기 게시글, 랭킹 진입을 통해 학업 자료를 빠르게 탐색할 수 있습니다.
+    leadership_label: UI Flow
+    leadership_title: 서비스 화면과 기능 흐름
+    leadership:
+      - title: 자료 탐색
+        body: 학년과 학기를 선택해 필요한 수업 자료를 필터링하고, 인기 게시글을 통해 자주 참고되는 자료에 접근할 수 있습니다.
+      - title: 게시판 검색
+        body: 과목 카테고리와 키워드 기반 검색으로 강의 노트, 시험 자료, 과제 접근법을 찾을 수 있게 구성했습니다.
+      - title: 사용자 관리
+        body: 로그인과 계정 생성 흐름을 통해 자료 등록, 수정, 삭제, 권한 기반 기능으로 확장할 수 있는 기반을 마련했습니다.
+    deliverables:
+      - icon: fa fa-list-alt
+        title: Board CRUD
+      - icon: fa fa-search
+        title: Keyword Search
+      - icon: fa fa-user
+        title: User Login
+      - icon: fa fa-download
+        title: Download Count
+      - icon: fa fa-comments
+        title: Q&A API
     highlights:
-      - User, Share, Question, Answer 도메인을 분리하고 Controller-Service-Repository 계층으로 구성했습니다.
-      - 자료 등록, 조회, 검색, 다운로드 카운트 증가, 질문/답변 API를 구현했습니다.
-      - Swagger/OpenAPI와 Docker Compose를 적용해 프론트엔드 연동과 로컬 테스트 편의성을 높였습니다.
-    stack:
-      - Java
-      - Spring Boot
-      - JPA
-      - MySQL
-      - Swagger
-      - Docker Compose
+      - 학업 자료와 과제 접근법을 공유하는 커뮤니티 서비스를 Spring Boot와 React 구조로 설계했습니다.
+      - 게시글 CRUD, 키워드/카테고리 검색, 사용자 관리, 자료 등록, 다운로드 카운트, 질문/답변 API를 구현했습니다.
+      - Swagger/OpenAPI와 Docker Compose를 적용해 React 프론트엔드 연동과 로컬 테스트 편의성을 높였습니다.
+    tech_groups:
+      - title: Backend
+        icon: fa fa-server
+        items:
+          - name: Java
+            logo: /assets/projects/campusshare/logos/java.svg
+          - name: Spring Boot
+            logo: /assets/projects/campusshare/logos/spring.svg
+          - name: REST API
+            icon: fa fa-exchange
+          - name: JPA
+            icon: fa fa-database
+      - title: Database & Runtime
+        icon: fa fa-database
+        items:
+          - name: MySQL
+            logo: /assets/projects/campusshare/logos/mysql.svg
+          - name: Docker Compose
+            logo: /assets/projects/campusshare/logos/docker.svg
+      - title: Docs & Tools
+        icon: fa fa-wrench
+        items:
+          - name: Swagger
+            logo: /assets/projects/campusshare/logos/swagger.svg
+          - name: IntelliJ
+            logo: /assets/projects/campusshare/logos/intellij.svg
+          - name: GitHub
+            logo: /assets/projects/campusshare/logos/github.svg
+      - title: API Consumer
+        icon: fa fa-code
+        items:
+          - name: React
+            logo: /assets/projects/campusshare/logos/react.svg
+          - name: HTML
+            logo: /assets/projects/campusshare/logos/html5.svg
+          - name: CSS
+            logo: /assets/projects/campusshare/logos/css3.svg
+          - name: JavaScript
+            logo: /assets/projects/campusshare/logos/javascript.svg
+    appendix_title: 서비스 UI와 핵심 화면
+    visual_assets:
+      - title: Board Search & Resource List
+        image: /assets/projects/campusshare/campusshare-boards.png
+        caption: 학년, 학기, 과목 카테고리 기준으로 게시글을 필터링하고 과제/자료 게시글을 조회할 수 있는 게시판 화면입니다.
+      - title: Login & User Flow
+        image: /assets/projects/campusshare/campusshare-login.png
+        caption: 사용자 로그인과 계정 생성 흐름을 제공해 자료 등록, Q&A, 권한 기반 기능으로 확장할 수 있는 진입 화면입니다.
+      - title: CampusShare Brand
+        image: /assets/projects/campusshare/campusshare-logo.png
+        caption: 학업 자료 공유 커뮤니티라는 서비스 방향을 보여주는 CampusShare 로고입니다.
     link: https://github.com/mmuhunn/CampusShare
     presentation_url: https://canva.link/u1aqszltue6oiv4
     presentation_pdf: /assets/projects/campusshare.pdf

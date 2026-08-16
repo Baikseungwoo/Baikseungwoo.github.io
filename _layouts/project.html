@@ -202,7 +202,7 @@
             <span class="project-detail__eyebrow">{{ current_project.leadership_label | default: "Leadership" }}</span>
             <h2>{{ current_project.leadership_title | default: "설계와 협업 산출물" }}</h2>
             {% if current_project.management_visual %}
-            <figure class="project-detail__wide-visual project-detail__wide-visual--soft">
+            <figure class="project-detail__wide-visual project-detail__wide-visual--soft{% if current_project.management_visual_large %} project-detail__wide-visual--large{% endif %}">
               <img src="{{ current_project.management_visual.image | relative_url }}" alt="{{ current_project.management_visual.title }}">
               <figcaption>{{ current_project.management_visual.caption }}</figcaption>
             </figure>
